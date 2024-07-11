@@ -1,11 +1,14 @@
+using System.Collections.ObjectModel;
+using System.Configuration;
 using static KnightPath.ChessBoard;
 
 namespace KnightPath
 {
     public static class ShortestPathCalculator
     {
-        static readonly int[] dx = [-2, -1, 1, 2, -2, -1, 1, 2];
-        static readonly int[] dy = [-1, -2, -2, -1, 1, 2, 2, 1];
+        static readonly List<int[]> PossibleMoves = new([
+            [-2, -1], [-1, -2], [1, -2], [2, -1], [-2, 1], [-1, 2], [1, 2], [2, 1]
+        ]);
 
         static char NumToRow(int position)
         {
@@ -14,7 +17,7 @@ namespace KnightPath
 
         static int RowToNum(char position)
         {
-          return (int)position - 65;
+            return (int)position - 65;
         }
 
         static string MoveListString(int positionX, int positionY)
@@ -39,7 +42,7 @@ namespace KnightPath
             ValidatePosition(starting);
             ValidatePosition(ending);
 
-            int startingX = RowToNum(starting[0]); 
+            int startingX = RowToNum(starting[0]);
             int startingY = (int)Char.GetNumericValue(starting[1]);
             int endingX = RowToNum(ending[0]);
             int endingY = (int)Char.GetNumericValue(ending[1]);
@@ -65,21 +68,21 @@ namespace KnightPath
                     return moveList[currentX][currentY];
                 }
 
-                for (int position = 0; position < 8; position++)
+                for (int position = 0; position < PossibleMoves.Count; position++)
                 {
-                    var newX = currentX + dx[position];
-                    var newY = currentY + dy[position];
+                    var newX = currentX + PossibleMoves[position][0];
+                    var newY = currentY + PossibleMoves[position][1];
+
                     if (OnBoard(newX, newY) && !moveList[newX].ContainsKey(newY))
                     {
                         moveList[newX][newY] = new List<string>(moveList[currentX][currentY])
-                      {
-                          MoveListString(newX, newY)
-                      };
+                        {
+                            MoveListString(newX, newY)
+                        };
                         queue.Enqueue([newX, newY]);
                     }
                 }
             }
-
             return [];
         }
     }
