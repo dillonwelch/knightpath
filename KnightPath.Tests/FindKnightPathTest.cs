@@ -45,13 +45,23 @@ public class FindKnightPathTest
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
             Assert.That(streamText, Is.EqualTo(json));
         });
+    }
 
-        // Assert.Multiple(() =>
-        // {
-        //     Assert.That(response.Message.Source, Is.EqualTo("A1"));
-        //     Assert.That(response.Message.Target, Is.EqualTo("D5"));
-        //     Assert.That(Guid.TryParse(response.Message.TrackingId, out Guid val));
-        // });
+    [Test]
+    public async Task FindKnightPathNotFoundTest()
+    {
+        MockHttpRequestData mockHttpRequest =
+          new MockHttpRequestDataBuilder()
+            .WithDefaultJsonSerializer()
+            .WithFakeFunctionContext()
+            .WithRawJsonBody("")
+            .Build();
 
+        var logger = new NullLogger<FindKnightPath>();
+        FindKnightPath function = new(logger);
+        var response = await function.RunAsync(mockHttpRequest, []).ConfigureAwait(false);
+
+        Assert.That(response, Is.InstanceOf(typeof(HttpResponseData)));
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
     }
 }
