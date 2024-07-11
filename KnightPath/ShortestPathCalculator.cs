@@ -1,25 +1,20 @@
+using static KnightPath.ChessBoard;
+
 namespace KnightPath
 {
     public static class ShortestPathCalculator
     {
-        static readonly Dictionary<string, int> boardMapping = new Dictionary<string, int>()
-      {
-          { "A", 0 }, { "B", 1 }, { "C", 2 }, { "D", 3 }, { "E", 4 }, { "F", 5 }, { "G", 6 }, { "H", 7 },
-      };
-        static readonly List<string> boardMappingKeys = [.. boardMapping.Keys];
         static readonly int[] dx = [-2, -1, 1, 2, -2, -1, 1, 2];
         static readonly int[] dy = [-1, -2, -2, -1, 1, 2, 2, 1];
 
-        const int ROWS = 8, COLUMNS = 8;
-
         static string MoveListString(int positionX, int positionY)
         {
-            return $"{boardMappingKeys[positionX]}{(positionY + 1)}";
+            return $"{BoardMappingKeys[positionX]}{(positionY + 1)}";
         }
 
         static bool OnBoard(int positionX, int positionY)
         {
-            if (positionX >= 0 && positionY >= 0 && positionX < ROWS && positionY < COLUMNS)
+            if (positionX >= 0 && positionY >= 0 && positionX < Rows && positionY < Rows)
             {
                 return true;
             }
@@ -35,9 +30,9 @@ namespace KnightPath
             ArgumentNullException.ThrowIfNull(starting);
             ArgumentNullException.ThrowIfNull(ending);
 
-            int startingX = boardMapping[starting[0].ToString()];
+            int startingX = BoardMapping[starting[0].ToString()];
             int startingY = (int)(Char.GetNumericValue(starting[1]) - 1);
-            int endingX = boardMapping[ending[0].ToString()];
+            int endingX = BoardMapping[ending[0].ToString()];
             int endingY = (int)(Char.GetNumericValue(ending[1]) - 1);
 
             if (!OnBoard(startingX, startingY))
@@ -53,7 +48,7 @@ namespace KnightPath
             queue.Enqueue([startingX, startingY]);
 
             Dictionary<int, Dictionary<int, List<string>>> moveList = [];
-            for (int row = 0; row < ROWS; row++)
+            for (int row = 0; row < Rows; row++)
             {
                 moveList[row] = [];
             }
