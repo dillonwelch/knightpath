@@ -15,10 +15,12 @@ namespace KnightPath
         }
 
         [Function("CreateKnightPath")]
-        public IActionResult Run([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequest req)
+        [QueueOutput("knightpathqueue")]    
+        public async Task<IActionResult> RunAsync([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequest req)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
-            return new OkObjectResult("Welcome to Azure Functions!");
+            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            return new OkObjectResult("Welcome to Azure Functions: " + requestBody);
         }
     }
 }
