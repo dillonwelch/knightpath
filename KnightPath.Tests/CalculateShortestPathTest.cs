@@ -45,8 +45,8 @@ public class CalculateShortestPathTest
 
         var logger = new NullLogger<CalculateShortestPath>();
         CalculateShortestPath function = new(logger);
-        ArgumentException e = Assert.Throws<ArgumentException>(() => function.Run(message));
-        Assert.That(e.Message, Is.EqualTo("TrackingId '{RawTrackingId}' is not a Guid. (Parameter '123')"));
+        FormatException e = Assert.Throws<FormatException>(() => function.Run(message));
+        Assert.That(e.Message, Is.EqualTo("Unrecognized Guid format."));
     }
 
     [Test]

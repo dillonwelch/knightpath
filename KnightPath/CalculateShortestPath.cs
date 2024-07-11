@@ -28,25 +28,21 @@ namespace KnightPath
                 ValidatePosition(input.Source);
                 ValidatePosition(input.Target);
 
-                if (Guid.TryParse(input.TrackingId, out Guid trackingId))
-                {
-                    var shortestPath = ShortestPathCalculator.CalculateShortestPath(input.Source, input.Target);
-                    var stringPath = String.Join(":", shortestPath);
+                Guid trackingId = Guid.Parse(input.TrackingId);
+                var shortestPath = ShortestPathCalculator.CalculateShortestPath(input.Source, input.Target);
+                var stringPath = String.Join(":", shortestPath);
 
-                    return new Path() {
-                        SourcePosition = input.Source,
-                        TargetPosition = input.Target,
-                        TrackingId = trackingId,
-                        NumberOfMoves = shortestPath.Count - 1,
-                        ShortestPath = stringPath
-                    };
-                }
-                else
-                {
-                    throw new ArgumentException("TrackingId '{RawTrackingId}' is not a Guid.", input.TrackingId);
-                }
+                return new Path() {
+                    SourcePosition = input.Source,
+                    TargetPosition = input.Target,
+                    TrackingId = trackingId,
+                    NumberOfMoves = shortestPath.Count - 1,
+                    ShortestPath = stringPath
+                };
             }
-            // Note: Unsure if exception throwing is the "right" way to handle these errors.
+            // NOTE: Unsure if exception rethrowing is the "right" way to handle these errors. 
+            // Do we need to manually log this, or is it logged already?
+            // What will this do to queue processing? Wil lit repeat endlessly?
             catch (Exception e) 
             {
                 // NOTE: Unclear how to best implement the solution.
