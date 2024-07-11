@@ -47,6 +47,8 @@ namespace KnightPath
             try 
             {
                 var input = JsonSerializer.Deserialize<CreateKnightPathRequest>(requestBody);
+                ArgumentNullException.ThrowIfNull(input);
+
                 var trackingId = Guid.NewGuid().ToString();
 
                 // TODO: JSON response?
