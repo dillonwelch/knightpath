@@ -25,7 +25,7 @@ namespace KnightPath
                 connectionStringSetting: "SqlConnectionString")]
             IEnumerable<Path> path)
         {
-            var result = path.FirstOrDefault();
+            Path? result = path.FirstOrDefault();
 
             if (result is not null)
             {
@@ -37,15 +37,14 @@ namespace KnightPath
                     OperationId = result.TrackingId
                 };
 
-                var response = req.CreateResponse(HttpStatusCode.OK);
+                HttpResponseData response = req.CreateResponse(HttpStatusCode.OK);
                 await response.WriteAsJsonAsync(json).ConfigureAwait(false);
 
                 return response;
             }
             else
             {
-                var response = req.CreateResponse(HttpStatusCode.NotFound);
-                return response;
+                return req.CreateResponse(HttpStatusCode.NotFound);
             }
         }
     }

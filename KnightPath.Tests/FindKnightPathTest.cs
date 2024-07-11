@@ -28,13 +28,9 @@ public class FindKnightPathTest
           TrackingId = operationId
         };
 
-        var logger = new NullLogger<FindKnightPath>();
-        FindKnightPath function = new(logger);
-        var response = await FindKnightPath.RunAsync(mockHttpRequest, [path]).ConfigureAwait(false);
+        HttpResponseData response = await FindKnightPath.RunAsync(mockHttpRequest, [path]).ConfigureAwait(false);
 
-        Assert.That(response, Is.InstanceOf(typeof(HttpResponseData)));
-
-        var streamText = await ReadBody(response.Body).ConfigureAwait(false);
+        string streamText = await ReadBody(response.Body).ConfigureAwait(false);
         string json = "{\"Starting\":\"A1\",\"Ending\":\"D5\",\"ShortestPath\":\"A1:C2:B4:D5\",\"NumberOfMoves\":3,\"OperationId\":\"" + operationId.ToString() + "\"}";
 
         Assert.Multiple(() =>
@@ -54,11 +50,8 @@ public class FindKnightPathTest
             .WithRawJsonBody("")
             .Build();
 
-        var logger = new NullLogger<FindKnightPath>();
-        FindKnightPath function = new(logger);
-        var response = await FindKnightPath.RunAsync(mockHttpRequest, []).ConfigureAwait(false);
+        HttpResponseData response = await FindKnightPath.RunAsync(mockHttpRequest, []).ConfigureAwait(false);
 
-        Assert.That(response, Is.InstanceOf(typeof(HttpResponseData)));
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
     }
 }

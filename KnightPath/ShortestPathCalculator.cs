@@ -68,8 +68,8 @@ namespace KnightPath
 
                 for (int position = 0; position < PossibleMoves.Count; position++)
                 {
-                    var newX = currentX + PossibleMoves[position][0];
-                    var newY = currentY + PossibleMoves[position][1];
+                    int newX = currentX + PossibleMoves[position][0];
+                    int newY = currentY + PossibleMoves[position][1];
 
                     if (OnBoard(newX, newY) && !moveList[newX].ContainsKey(newY))
                     {

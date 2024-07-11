@@ -18,11 +18,8 @@ public class CalculateShortestPathTest
           body: BinaryData.FromString(messageText),
           dequeueCount: 0);
 
-        var logger = new NullLogger<CalculateShortestPath>();
-        CalculateShortestPath function = new(logger);
-        var response = function.Run(message);
+        Path response = new CalculateShortestPath(new NullLogger<CalculateShortestPath>()).Run(message);
 
-        Assert.That(response, Is.InstanceOf(typeof(Path)));
         Assert.Multiple(() =>
         {
             Assert.That(response.SourcePosition, Is.EqualTo("A1"));
@@ -43,8 +40,7 @@ public class CalculateShortestPathTest
           body: BinaryData.FromString(messageText),
           dequeueCount: 0);
 
-        var logger = new NullLogger<CalculateShortestPath>();
-        CalculateShortestPath function = new(logger);
+        CalculateShortestPath function = new(new NullLogger<CalculateShortestPath>());
         FormatException e = Assert.Throws<FormatException>(() => function.Run(message));
         Assert.That(e.Message, Is.EqualTo("Unrecognized Guid format."));
     }
@@ -59,8 +55,7 @@ public class CalculateShortestPathTest
           body: BinaryData.FromString(messageText),
           dequeueCount: 0);
 
-        var logger = new NullLogger<CalculateShortestPath>();
-        CalculateShortestPath function = new(logger);
+        CalculateShortestPath function = new(new NullLogger<CalculateShortestPath>());
         JsonException e = Assert.Throws<JsonException>(() => function.Run(message));
         Assert.That(e.Message, Is.EqualTo("JSON deserialization for type 'KnightPath.CreateKnightPathQueueMessage' was missing required properties, including the following: TrackingId, Source, Target"));
     }
@@ -75,8 +70,7 @@ public class CalculateShortestPathTest
           body: BinaryData.FromString(messageText),
           dequeueCount: 0);
 
-        var logger = new NullLogger<CalculateShortestPath>();
-        CalculateShortestPath function = new(logger);
+        CalculateShortestPath function = new(new NullLogger<CalculateShortestPath>());
         ArgumentException e = Assert.Throws<ArgumentException>(() => function.Run(message));
         Assert.That(e.Message, Is.EqualTo("The value cannot be an empty string or composed entirely of whitespace. (Parameter 'position')"));
     }
@@ -91,8 +85,7 @@ public class CalculateShortestPathTest
           body: BinaryData.FromString(messageText),
           dequeueCount: 0);
 
-        var logger = new NullLogger<CalculateShortestPath>();
-        CalculateShortestPath function = new(logger);
+        CalculateShortestPath function = new(new NullLogger<CalculateShortestPath>());
         ArgumentException e = Assert.Throws<ArgumentException>(() => function.Run(message));
         Assert.That(e.Message, Is.EqualTo("The value cannot be an empty string or composed entirely of whitespace. (Parameter 'position')"));
     }
@@ -107,8 +100,7 @@ public class CalculateShortestPathTest
           body: BinaryData.FromString(messageText),
           dequeueCount: 0);
 
-        var logger = new NullLogger<CalculateShortestPath>();
-        CalculateShortestPath function = new(logger);
+        CalculateShortestPath function = new(new NullLogger<CalculateShortestPath>());
         JsonException e = Assert.Throws<JsonException>(() => function.Run(message));
         Assert.That(e.Message, Is.EqualTo("'H' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 0 | BytePositionInLine: 2."));
     }

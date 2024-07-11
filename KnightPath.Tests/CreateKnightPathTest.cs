@@ -8,7 +8,6 @@ namespace KnightPath.Tests;
 [TestFixture]
 public class CreateKnightPathTest
 {
-    // NOTE: I would love to be testing the response body content but I can't figure out how :(
     [Test]
     public async Task CreateKnightPathSuccessTest()
     {
@@ -19,12 +18,9 @@ public class CreateKnightPathTest
             .WithRawJsonBody("{\"Source\": \"A1\", \"Target\": \"D5\"}")
             .Build();
 
-        var logger = new NullLogger<CreateKnightPath>();
-        CreateKnightPath function = new(logger);
-        var response = await function.RunAsync(mockHttpRequest).ConfigureAwait(false);
-
-        Assert.That(response.HttpResponse, Is.InstanceOf(typeof(HttpResponseData)));
-        var streamText = await ReadBody(response.HttpResponse.Body).ConfigureAwait(false);
+        CreateKnightPath function = new(new NullLogger<CreateKnightPath>());
+        MultiResponse response = await function.RunAsync(mockHttpRequest).ConfigureAwait(false);
+        string streamText = await ReadBody(response.HttpResponse.Body).ConfigureAwait(false);
 
         Assert.Multiple(() =>
         {
@@ -52,12 +48,9 @@ public class CreateKnightPathTest
             .WithRawJsonBody("{\"Meow\": \"A1\", \"Woof\": \"D5\"}")
             .Build();
 
-        var logger = new NullLogger<CreateKnightPath>();
-        CreateKnightPath function = new(logger);
-        var response = await function.RunAsync(mockHttpRequest).ConfigureAwait(false);
-
-        Assert.That(response.HttpResponse, Is.InstanceOf(typeof(HttpResponseData)));
-        var streamText = await ReadBody(response.HttpResponse.Body).ConfigureAwait(false);
+        CreateKnightPath function = new(new NullLogger<CreateKnightPath>());
+        MultiResponse response = await function.RunAsync(mockHttpRequest).ConfigureAwait(false);
+        string streamText = await ReadBody(response.HttpResponse.Body).ConfigureAwait(false);
 
         Assert.Multiple(() =>
         {
@@ -77,12 +70,9 @@ public class CreateKnightPathTest
             .WithRawJsonBody("{\"Source\": \"A1\", \"Target\": \"\"}")
             .Build();
 
-        var logger = new NullLogger<CreateKnightPath>();
-        CreateKnightPath function = new(logger);
-        var response = await function.RunAsync(mockHttpRequest).ConfigureAwait(false);
-
-        Assert.That(response.HttpResponse, Is.InstanceOf(typeof(HttpResponseData)));
-        var streamText = await ReadBody(response.HttpResponse.Body).ConfigureAwait(false);
+        CreateKnightPath function = new(new NullLogger<CreateKnightPath>());
+        MultiResponse response = await function.RunAsync(mockHttpRequest).ConfigureAwait(false);
+        string streamText = await ReadBody(response.HttpResponse.Body).ConfigureAwait(false);
 
         Assert.Multiple(() =>
         {
@@ -102,12 +92,9 @@ public class CreateKnightPathTest
             .WithRawJsonBody("{slakfjldkjafoiwjefoiwqjfeoij}")
             .Build();
 
-        var logger = new NullLogger<CreateKnightPath>();
-        CreateKnightPath function = new(logger);
-        var response = await function.RunAsync(mockHttpRequest).ConfigureAwait(false);
-
-        Assert.That(response.HttpResponse, Is.InstanceOf(typeof(HttpResponseData)));
-        var streamText = await ReadBody(response.HttpResponse.Body).ConfigureAwait(false);
+        CreateKnightPath function = new(new NullLogger<CreateKnightPath>());
+        MultiResponse response = await function.RunAsync(mockHttpRequest).ConfigureAwait(false);
+        string streamText = await ReadBody(response.HttpResponse.Body).ConfigureAwait(false);
 
         Assert.Multiple(() =>
         {
@@ -128,12 +115,9 @@ public class CreateKnightPathTest
             .WithRawJsonBody("")
             .Build();
 
-        var logger = new NullLogger<CreateKnightPath>();
-        CreateKnightPath function = new(logger);
-        var response = await function.RunAsync(mockHttpRequest).ConfigureAwait(false);
-
-        Assert.That(response.HttpResponse, Is.InstanceOf(typeof(HttpResponseData)));
-        var streamText = await ReadBody(response.HttpResponse.Body).ConfigureAwait(false);
+        CreateKnightPath function = new(new NullLogger<CreateKnightPath>());
+        MultiResponse response = await function.RunAsync(mockHttpRequest).ConfigureAwait(false);
+        string streamText = await ReadBody(response.HttpResponse.Body).ConfigureAwait(false);
 
         Assert.Multiple(() =>
         {

@@ -23,14 +23,14 @@ namespace KnightPath
             try
             {
                 ArgumentNullException.ThrowIfNull(message);
-                var input = JsonSerializer.Deserialize<CreateKnightPathQueueMessage>(message.MessageText);
+                CreateKnightPathQueueMessage? input = JsonSerializer.Deserialize<CreateKnightPathQueueMessage>(message.MessageText);
                 ArgumentNullException.ThrowIfNull(input);
                 ValidatePosition(input.Source);
                 ValidatePosition(input.Target);
 
                 Guid trackingId = Guid.Parse(input.TrackingId);
-                var shortestPath = ShortestPathCalculator.CalculateShortestPath(input.Source, input.Target);
-                var stringPath = String.Join(":", shortestPath);
+                IList<string> shortestPath = ShortestPathCalculator.CalculateShortestPath(input.Source, input.Target);
+                string stringPath = string.Join(":", shortestPath);
 
                 return new Path() {
                     SourcePosition = input.Source,

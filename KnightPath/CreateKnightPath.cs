@@ -22,6 +22,7 @@ namespace KnightPath
 
     public class MultiResponse
     {
+        // TODO: Const
         [QueueOutput("knightpathqueue")]
         public CreateKnightPathQueueMessage? Message { get; set; }
         public required HttpResponseData HttpResponse { get; set; }
@@ -47,14 +48,14 @@ namespace KnightPath
 
             try
             {
-                var input = JsonSerializer.Deserialize<CreateKnightPathRequest>(requestBody);
+                CreateKnightPathRequest? input = JsonSerializer.Deserialize<CreateKnightPathRequest>(requestBody);
                 ArgumentNullException.ThrowIfNull(input);
                 ValidatePosition(input.Source);
                 ValidatePosition(input.Target);
 
-                var trackingId = Guid.NewGuid().ToString();
+                string trackingId = Guid.NewGuid().ToString();
 
-                var response = req.CreateResponse(HttpStatusCode.OK);
+                HttpResponseData response = req.CreateResponse(HttpStatusCode.OK);
                 response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
                 await response.WriteStringAsync(trackingId).ConfigureAwait(false);
 
@@ -78,7 +79,7 @@ namespace KnightPath
                 _logger.LogError("Error processing request body: {Error}", e.Message);
                 # pragma warning restore CA1848
 
-                var response = req.CreateResponse(HttpStatusCode.BadRequest);
+                HttpResponseData response = req.CreateResponse(HttpStatusCode.BadRequest);
                 response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
                 // NOTE: It would be nice to have different responses for different validation errors.
                 await response.WriteStringAsync("Error processing request body!").ConfigureAwait(false);
