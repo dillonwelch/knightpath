@@ -19,8 +19,8 @@ namespace KnightPath
 
         public class CreateKnightPathRequest
         {
-            public string? Source { get; set; }
-            public string? Target { get; set; }
+            public required string Source { get; set; }
+            public required string Target { get; set; }
         }
 
         public class CreateKnightPathQueueMessage
@@ -44,25 +44,42 @@ namespace KnightPath
             _logger.LogInformation("C# HTTP trigger function processed a request.");
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            var input = JsonSerializer.Deserialize<CreateKnightPathRequest>(requestBody);
-            var trackingId = Guid.NewGuid().ToString();
-
-            var response = req.CreateResponse(HttpStatusCode.OK);
-            response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
-            await response.WriteStringAsync(trackingId);
-
-            CreateKnightPathQueueMessage message = new() 
+            try 
             {
-                TrackingId = trackingId,
-                Source = input.Source,
-                Target = input.Target
-            };
+                var input = JsonSerializer.Deserialize<CreateKnightPathRequest>(requestBody);
+                var trackingId = Guid.NewGuid().ToString();
 
-            return new MultiResponse() 
+                // TODO: JSON response?
+                var response = req.CreateResponse(HttpStatusCode.OK);
+                response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
+                await response.WriteStringAsync(trackingId);
+
+                CreateKnightPathQueueMessage message = new() 
+                {
+                    TrackingId = trackingId,
+                    Source = input.Source,
+                    Target = input.Target
+                };
+
+                return new MultiResponse() 
+                {
+                    Message = message,
+                    HttpResponse = response
+                };
+            }
+            catch (JsonException ex) 
             {
-                Message = message,
-                HttpResponse = response
-            };
+                // _logger.LogError($"Error deserializing JSON: {ex.Message}");
+
+                var response = req.CreateResponse(HttpStatusCode.BadRequest);
+                response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
+                await response.WriteStringAsync("oh no!");
+
+                return new MultiResponse()
+                {
+                    HttpResponse = response
+                };
+            }
         }
     }
 }
