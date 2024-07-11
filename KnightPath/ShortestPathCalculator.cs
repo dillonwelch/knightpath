@@ -17,8 +17,7 @@ namespace KnightPath
             return $"{boardMappingKeys[positionX]}{(positionY + 1)}";
         }
 
-        // TODO: Only need public for tests.
-        public static bool OnBoard(int positionX, int positionY)
+        static bool OnBoard(int positionX, int positionY)
         {
             if (positionX >= 0 && positionY >= 0 && positionX < ROWS && positionY < COLUMNS)
             {
@@ -40,6 +39,16 @@ namespace KnightPath
             int startingY = (int)(Char.GetNumericValue(starting[1]) - 1);
             int endingX = boardMapping[ending[0].ToString()];
             int endingY = (int)(Char.GetNumericValue(ending[1]) - 1);
+
+            if (!OnBoard(startingX, startingY))
+            {
+                throw new ArgumentException("Starting position out of bounds.");
+            }
+            if (!OnBoard(endingX, endingY))
+            {
+                throw new ArgumentException("Ending position out of bounds.");
+            }
+
             var queue = new Queue<int[]>();
             queue.Enqueue([startingX, startingY]);
 

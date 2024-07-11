@@ -4,41 +4,17 @@ namespace KnightPath.Tests;
 public class ShortestPathCalculatorTest
 {
     [Test]
-    public void OnBoardValid()
+    public void CalculateOutOfBoundsX()
     {
-        Assert.That(ShortestPathCalculator.OnBoard(0, 0));
+        ArgumentException e = Assert.Throws<ArgumentException>(() => ShortestPathCalculator.CalculateShortestPath("A9", "A2"));
+        Assert.That(e.Message, Is.EqualTo("Starting position out of bounds."));
     }
 
     [Test]
-    public void OnBoardInvalidNegativeX()
+    public void CalculateOutOfBoundsY()
     {
-        Assert.That(ShortestPathCalculator.OnBoard(-1, 0), Is.False);
-    }
-
-    [Test]
-    public void OnBoardInvalidNegativeY()
-    {
-        Assert.That(ShortestPathCalculator.OnBoard(0, -1), Is.False);
-    }
-
-    [Test]
-    public void OnBoardInvalidOutOfBoundsX()
-    {
-        Assert.That(ShortestPathCalculator.OnBoard(8, 0), Is.False);
-    }
-
-    [Test]
-    public void OnBoardInvalidOutOfBoundsY()
-    {
-        Assert.That(ShortestPathCalculator.OnBoard(0, 8), Is.False);
-    }
-
-    [Test]
-    public void CalculateOutOfBounds()
-    {
-        var actual = ShortestPathCalculator.CalculateShortestPath("A2", "A9");
-        var expected = new List<string>();
-        Assert.That(actual, Is.EqualTo(expected));
+        ArgumentException e = Assert.Throws<ArgumentException>(() => ShortestPathCalculator.CalculateShortestPath("A2", "A9"));
+        Assert.That(e.Message, Is.EqualTo("Ending position out of bounds."));
     }
 
     [Test]
