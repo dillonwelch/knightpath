@@ -1,6 +1,4 @@
-// using Microsoft.Extensions.Logging.Abstractions;
 using System.Net;
-using System.Text.Json;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq; // TODO: Remove?
