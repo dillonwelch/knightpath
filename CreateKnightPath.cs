@@ -69,7 +69,7 @@ namespace KnightPath
             }
             catch (JsonException ex) 
             {
-                // _logger.LogError($"Error deserializing JSON: {ex.Message}");
+                _logger.LogError("Error deserializing JSON: {Error}", ex.Message);
 
                 var response = req.CreateResponse(HttpStatusCode.BadRequest);
                 response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
