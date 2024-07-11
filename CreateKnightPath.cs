@@ -23,17 +23,26 @@ namespace KnightPath
             public string? Target { get; set; }
         }
 
+        public class CreateKnightPathQueueMessage
+        {
+            public required string TrackingId { get; set; }
+            public required string Source { get; set; }
+            public required string Target { get; set; }
+        }
+
         public class MultiResponse
         {
             [QueueOutput("knightpathqueue")]
-            public string? Message { get; set; }
+            public CreateKnightPathQueueMessage? Message { get; set; }
             public required HttpResponseData HttpResponse { get; set; }
         }
 
         [Function("CreateKnightPath")]
         public async Task<MultiResponse> RunAsync([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestData req)
         {
+            // TODO: Better logs
             _logger.LogInformation("C# HTTP trigger function processed a request.");
+
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             var input = JsonSerializer.Deserialize<CreateKnightPathRequest>(requestBody);
             var trackingId = Guid.NewGuid().ToString();
@@ -42,9 +51,16 @@ namespace KnightPath
             response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
             await response.WriteStringAsync(trackingId);
 
+            CreateKnightPathQueueMessage message = new() 
+            {
+                TrackingId = trackingId,
+                Source = input.Source,
+                Target = input.Target
+            };
+
             return new MultiResponse() 
             {
-                Message = trackingId,
+                Message = message,
                 HttpResponse = response
             };
         }
