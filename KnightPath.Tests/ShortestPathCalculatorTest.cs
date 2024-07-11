@@ -4,17 +4,32 @@ namespace KnightPath.Tests;
 public class ShortestPathCalculatorTest
 {
     [Test]
-    public void CalculateOutOfBoundsX()
+    public void CalculateOutOfBoundsRowX()
     {
-        ArgumentException e = Assert.Throws<ArgumentException>(() => ShortestPathCalculator.CalculateShortestPath("A9", "A2"));
-        Assert.That(e.Message, Is.EqualTo("Starting position out of bounds."));
+        ArgumentException e = Assert.Throws<ArgumentException>(() => ShortestPathCalculator.CalculateShortestPath("Q2", "A2"));
+        Assert.That(e.Message, Is.EqualTo("Invalid row identifier 'Q' in position 'Q2'."));
     }
 
     [Test]
-    public void CalculateOutOfBoundsY()
+    public void CalculateOutOfBoundsColumnX()
+    {
+        ArgumentException e = Assert.Throws<ArgumentException>(() => ShortestPathCalculator.CalculateShortestPath("A9", "A2"));
+        Assert.That(e.Message, Is.EqualTo("Invalid column identifier '9' in position 'A9'."));
+    }
+
+    [Test]
+    public void CalculateOutOfBoundsRowY()
+    {
+        ArgumentException e = Assert.Throws<ArgumentException>(() => ShortestPathCalculator.CalculateShortestPath("A2", "Q2"));
+        Assert.That(e.Message, Is.EqualTo("Invalid row identifier 'Q' in position 'Q2'."));
+    }
+
+
+    [Test]
+    public void CalculateOutOfBoundsColumnY()
     {
         ArgumentException e = Assert.Throws<ArgumentException>(() => ShortestPathCalculator.CalculateShortestPath("A2", "A9"));
-        Assert.That(e.Message, Is.EqualTo("Ending position out of bounds."));
+        Assert.That(e.Message, Is.EqualTo("Invalid column identifier '9' in position 'A9'."));
     }
 
     [Test]

@@ -9,7 +9,7 @@ namespace KnightPath
 
         static string MoveListString(int positionX, int positionY)
         {
-            return $"{BoardMappingKeys[positionX]}{(positionY + 1)}";
+            return $"{NumToRow(positionX)}{(positionY + 1)}";
         }
 
         static bool OnBoard(int positionX, int positionY)
@@ -26,23 +26,13 @@ namespace KnightPath
 
         public static IList<string> CalculateShortestPath(string starting, string ending)
         {
-            // TODO: How to validate A1 vs 99
-            ArgumentNullException.ThrowIfNull(starting);
-            ArgumentNullException.ThrowIfNull(ending);
+            ValidatePosition(starting);
+            ValidatePosition(ending);
 
-            int startingX = BoardMapping[starting[0].ToString()];
+            int startingX = RowToNum(starting[0]); 
             int startingY = (int)(Char.GetNumericValue(starting[1]) - 1);
-            int endingX = BoardMapping[ending[0].ToString()];
+            int endingX = RowToNum(ending[0]);
             int endingY = (int)(Char.GetNumericValue(ending[1]) - 1);
-
-            if (!OnBoard(startingX, startingY))
-            {
-                throw new ArgumentException("Starting position out of bounds.");
-            }
-            if (!OnBoard(endingX, endingY))
-            {
-                throw new ArgumentException("Ending position out of bounds.");
-            }
 
             var queue = new Queue<int[]>();
             queue.Enqueue([startingX, startingY]);

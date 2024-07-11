@@ -2,13 +2,33 @@ namespace KnightPath
 {
     public static class ChessBoard
     {
-        public static readonly Dictionary<string, int> BoardMapping = new Dictionary<string, int>()
-        {
-            { "A", 0 }, { "B", 1 }, { "C", 2 }, { "D", 3 }, { "E", 4 }, { "F", 5 }, { "G", 6 }, { "H", 7 },
-        };
-        // TODO: build warn
-        public static readonly List<string> BoardMappingKeys = [.. BoardMapping.Keys];
-
         public const int Rows = 8, Colunns = 8;
+
+        public static char NumToRow(int position)
+        {
+            return (char)(position + 65);
+        }
+
+        public static int RowToNum(char position)
+        {
+          return (int)position - 65;
+        }
+
+        public static void ValidatePosition(string position) 
+        {
+            ArgumentNullException.ThrowIfNullOrWhiteSpace(position);
+
+            if (!Char.IsBetween(position[0], 'A', 'H'))
+            {
+              string positionX = position[0].ToString();
+              throw new ArgumentException("Invalid row identifier '" + positionX + "' in position '" + position + "'.");
+            }
+
+            int positionY = (int)(Char.GetNumericValue(position[1]) - 1);
+            if (positionY < 0 || positionY >= Rows) 
+            {
+              throw new ArgumentException("Invalid column identifier '" + (positionY + 1) + "' in position '" + position + "'.");
+            }
+        }
     }
 }
