@@ -10,6 +10,7 @@ namespace KnightPath.Tests;
 [TestFixture]
 public class CreateKnightPathTest
 {
+    // NOTE: I would love to be testing the response body content but I can't figure out how :(
     [Test]
     public async Task CreateKnightPathSuccessTest()
     {
@@ -60,7 +61,28 @@ public class CreateKnightPathTest
             Assert.That(response.HttpResponse.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
             Assert.That(response.Message, Is.Null);
         });
+    }
 
+    [Test]
+    public async Task CreateKnightPathEmptyParamTest()
+    {
+        MockHttpRequestData mockHttpRequest =
+          new MockHttpRequestDataBuilder()
+            .WithDefaultJsonSerializer()
+            .WithFakeFunctionContext()
+            .WithRawJsonBody("{\"Source\": \"A1\", \"Target\": \"\"}")
+            .Build();
+
+        var logger = new NullLogger<CreateKnightPath>();
+        CreateKnightPath function = new(logger);
+        var response = await function.RunAsync(mockHttpRequest).ConfigureAwait(false);
+
+        Assert.That(response.HttpResponse, Is.InstanceOf(typeof(HttpResponseData)));
+        Assert.Multiple(() =>
+        {
+            Assert.That(response.HttpResponse.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
+            Assert.That(response.Message, Is.Null);
+        });
     }
 
     [Test]

@@ -47,7 +47,9 @@ namespace KnightPath
             try
             {
                 var input = JsonSerializer.Deserialize<CreateKnightPathRequest>(requestBody);
-                ArgumentNullException.ThrowIfNull(input);
+                // TODO: Validate it matches the A1 pattern
+                ArgumentNullException.ThrowIfNullOrWhiteSpace(input?.Source);
+                ArgumentNullException.ThrowIfNullOrWhiteSpace(input?.Target);
 
                 var trackingId = Guid.NewGuid().ToString();
 
