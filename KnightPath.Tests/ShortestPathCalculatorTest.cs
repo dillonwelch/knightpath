@@ -3,38 +3,34 @@ namespace KnightPath.Tests;
 [TestFixture]
 public class ShortestPathCalculatorTest
 {
-    [TestFixture]
-    public class OnBoardTest
+    [Test]
+    public void OnBoardValid()
     {
-        [Test]
-        public void OnBoardValid()
-        {
-            Assert.That(ShortestPathCalculator.OnBoard(0, 0));
-        }
+        Assert.That(ShortestPathCalculator.OnBoard(0, 0));
+    }
 
-        [Test]
-        public void OnBoardInvalidNegativeX()
-        {
-            Assert.That(ShortestPathCalculator.OnBoard(-1, 0), Is.False);
-        }
+    [Test]
+    public void OnBoardInvalidNegativeX()
+    {
+        Assert.That(ShortestPathCalculator.OnBoard(-1, 0), Is.False);
+    }
 
-        [Test]
-        public void OnBoardInvalidNegativeY()
-        {
-            Assert.That(ShortestPathCalculator.OnBoard(0, -1), Is.False);
-        }
+    [Test]
+    public void OnBoardInvalidNegativeY()
+    {
+        Assert.That(ShortestPathCalculator.OnBoard(0, -1), Is.False);
+    }
 
-        [Test]
-        public void OnBoardInvalidOutOfBoundsX()
-        {
-            Assert.That(ShortestPathCalculator.OnBoard(8, 0), Is.False);
-        }
+    [Test]
+    public void OnBoardInvalidOutOfBoundsX()
+    {
+        Assert.That(ShortestPathCalculator.OnBoard(8, 0), Is.False);
+    }
 
-        [Test]
-        public void OnBoardInvalidOutOfBoundsY()
-        {
-            Assert.That(ShortestPathCalculator.OnBoard(0, 8), Is.False);
-        }
+    [Test]
+    public void OnBoardInvalidOutOfBoundsY()
+    {
+        Assert.That(ShortestPathCalculator.OnBoard(0, 8), Is.False);
     }
 
     [Test]

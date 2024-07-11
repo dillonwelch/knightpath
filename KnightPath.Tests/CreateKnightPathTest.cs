@@ -3,7 +3,7 @@ using System.Net;
 using System.Text.Json;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging.Abstractions;
-using Moq;
+using Moq; // TODO: Remove?
 
 namespace KnightPath.Tests;
   
@@ -11,13 +11,10 @@ namespace KnightPath.Tests;
 public class CreateKnightPathTest
 {
     [Test]
-    public async Task KnightValidTest()
+    public async Task CreateKnightPathSuccessTest()
     {
-        // var request = new Mock<HttpRequestData>();
         var body = new { Source = "A1", Target = "D5" };
         var json = JsonSerializer.Serialize(body);
-        // var memoryStream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(json));
-        // request.SetupGet(req => req.Body).Returns(memoryStream);
 
         MockHttpRequestData mockHttpRequest =
           new MockHttpRequestDataBuilder()
@@ -28,7 +25,7 @@ public class CreateKnightPathTest
 
         var logger = new NullLogger<CreateKnightPath>();
         CreateKnightPath function = new(logger);
-        var response = await function.RunAsync(mockHttpRequest);
+        var response = await function.RunAsync(mockHttpRequest).ConfigureAwait(false);
 
         Assert.That(response.HttpResponse, Is.InstanceOf(typeof(HttpResponseData)));
         Assert.That(response.HttpResponse.StatusCode, Is.EqualTo(HttpStatusCode.OK));
@@ -36,12 +33,6 @@ public class CreateKnightPathTest
         Assert.That(response.Message.Source, Is.EqualTo(body.Source));
         Assert.That(response.Message.Target, Is.EqualTo(body.Target));
         Assert.That(Guid.TryParse(response.Message.TrackingId, out Guid val));
-
-        // Assert.That(response, Is.InstanceOf(typeof(OkObjectResult)));
-
-        // var okResult = response as OkObjectResult;
-        // var trackingId = okResult?.Value?.ToString();
-        // Assert.That(db.StringGet(trackingId).ToString(), Is.EqualTo(json));
     }
 
     // [Test]
