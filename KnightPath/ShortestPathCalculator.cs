@@ -7,6 +7,16 @@ namespace KnightPath
         static readonly int[] dx = [-2, -1, 1, 2, -2, -1, 1, 2];
         static readonly int[] dy = [-1, -2, -2, -1, 1, 2, 2, 1];
 
+        static char NumToRow(int position)
+        {
+            return (char)(position + 65);
+        }
+
+        static int RowToNum(char position)
+        {
+          return (int)position - 65;
+        }
+
         static string MoveListString(int positionX, int positionY)
         {
             return $"{NumToRow(positionX)}{(positionY + 1)}";

@@ -4,16 +4,6 @@ namespace KnightPath
     {
         public const int Rows = 8, Colunns = 8;
 
-        public static char NumToRow(int position)
-        {
-            return (char)(position + 65);
-        }
-
-        public static int RowToNum(char position)
-        {
-          return (int)position - 65;
-        }
-
         public static void ValidatePosition(string position) 
         {
             ArgumentNullException.ThrowIfNullOrWhiteSpace(position);
