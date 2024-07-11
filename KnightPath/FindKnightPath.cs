@@ -10,15 +10,15 @@ namespace KnightPath
 {
     public class FindKnightPath
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<FindKnightPath> _logger;
 
-        public FindKnightPath(ILoggerFactory loggerFactory)
+        public FindKnightPath(ILogger<FindKnightPath> logger)
         {
-            _logger = loggerFactory.CreateLogger<FindKnightPath>();
+            _logger = logger;
         }
 
         [Function("FindKnightPath")]
-        public async Task<HttpResponseData> Run(
+        public async Task<HttpResponseData> RunAsync(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get")]
             HttpRequestData req,
             [SqlInput(commandText: "select * from dbo.Paths where TrackingId = @TrackingId",
@@ -40,7 +40,7 @@ namespace KnightPath
                 };
 
                 var response = req.CreateResponse(HttpStatusCode.OK);
-                await response.WriteAsJsonAsync(json);
+                await response.WriteAsJsonAsync(json).ConfigureAwait(false);
 
                 return response;
             }
