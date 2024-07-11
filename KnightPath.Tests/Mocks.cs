@@ -9,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace KnightPath.Tests;
 
+#pragma warning disable
+// This file was sourced from https://github.com/Azure/azure-functions-dotnet-worker/issues/2263
 public sealed class MockHttpRequestData : HttpRequestData
 {
     private readonly FunctionContext context;
@@ -165,3 +167,4 @@ public class FakeFunctionContext(IInvocationFeatures features, IDictionary<objec
 
     public override IInvocationFeatures Features { get; } = features;
 }
+#pragma warning restore
