@@ -37,8 +37,7 @@ namespace KnightPath
             };
 
             var response = req.CreateResponse(HttpStatusCode.OK);
-            response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
-            await response.WriteStringAsync(result.ShortestPath);
+            await response.WriteAsJsonAsync(json);
 
             return response;
         }
