@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Azure.Functions.Worker.Extensions.Sql;
@@ -18,7 +16,7 @@ namespace KnightPath
         }
 
         [Function("FindKnightPath")]
-        public async Task<HttpResponseData> RunAsync(
+        public static async Task<HttpResponseData> RunAsync(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get")]
             HttpRequestData req,
             [SqlInput(commandText: "select * from dbo.Paths where TrackingId = @TrackingId",
@@ -34,8 +32,8 @@ namespace KnightPath
                 var json = new {
                     Starting = result.SourcePosition,
                     Ending = result.TargetPosition,
-                    ShortestPath = result.ShortestPath,
-                    NumberOfMoves = result.NumberOfMoves,
+                    result.ShortestPath,
+                    result.NumberOfMoves,
                     OperationId = result.TrackingId
                 };
 

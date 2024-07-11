@@ -30,7 +30,7 @@ public class FindKnightPathTest
 
         var logger = new NullLogger<FindKnightPath>();
         FindKnightPath function = new(logger);
-        var response = await function.RunAsync(mockHttpRequest, [path]).ConfigureAwait(false);
+        var response = await FindKnightPath.RunAsync(mockHttpRequest, [path]).ConfigureAwait(false);
 
         Assert.That(response, Is.InstanceOf(typeof(HttpResponseData)));
 
@@ -56,7 +56,7 @@ public class FindKnightPathTest
 
         var logger = new NullLogger<FindKnightPath>();
         FindKnightPath function = new(logger);
-        var response = await function.RunAsync(mockHttpRequest, []).ConfigureAwait(false);
+        var response = await FindKnightPath.RunAsync(mockHttpRequest, []).ConfigureAwait(false);
 
         Assert.That(response, Is.InstanceOf(typeof(HttpResponseData)));
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
