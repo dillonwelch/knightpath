@@ -22,10 +22,10 @@ namespace KnightPath
         {
             try
             {
-                // TODO: Catch errors
                 ArgumentNullException.ThrowIfNull(message);
                 var input = JsonSerializer.Deserialize<CreateKnightPathQueueMessage>(message.MessageText);
                 ArgumentNullException.ThrowIfNull(input);
+                // TODO: Validate A1 pattern.
                 ArgumentException.ThrowIfNullOrWhiteSpace(input.Source);
                 ArgumentException.ThrowIfNullOrWhiteSpace(input.Target);
 
@@ -47,6 +47,7 @@ namespace KnightPath
                     throw new ArgumentException("TrackingId '{RawTrackingId}' is not a Guid.", input.TrackingId);
                 }
             }
+            // Note: Unsure if exception throwing is the "right" way to handle these errors.
             catch (Exception e) 
             {
                 // NOTE: Unclear how to best implement the solution.

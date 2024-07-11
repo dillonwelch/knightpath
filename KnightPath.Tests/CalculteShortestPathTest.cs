@@ -1,4 +1,5 @@
 using System.Net;
+using System.Text.Json;
 using Azure.Storage.Queues.Models;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -46,6 +47,71 @@ public class CalculateShortestPathTest
 
         var logger = new NullLogger<CalculateShortestPath>();
         CalculateShortestPath function = new(logger);
-        Assert.Throws<ArgumentException>(() => function.Run(message));
+        ArgumentException e = Assert.Throws<ArgumentException>(() => function.Run(message));
+        Assert.That(e.Message, Is.EqualTo("TrackingId '{RawTrackingId}' is not a Guid. (Parameter '123')"));
+    }
+
+    [Test]
+    public void CalculateShortestPathMissingKeysTest()
+    {
+        string messageText = "{ \"Meow\": \"123\", \"Woof\": \"A1\", \"Ribbit\": \"D5\" }";
+        QueueMessage message = QueuesModelFactory.QueueMessage(
+          messageId: "id",
+          popReceipt: "pr",
+          body: BinaryData.FromString(messageText),
+          dequeueCount: 0);
+
+        var logger = new NullLogger<CalculateShortestPath>();
+        CalculateShortestPath function = new(logger);
+        JsonException e = Assert.Throws<JsonException>(() => function.Run(message));
+        Assert.That(e.Message, Is.EqualTo("JSON deserialization for type 'KnightPath.CreateKnightPathQueueMessage' was missing required properties, including the following: TrackingId, Source, Target"));
+    }
+
+    [Test]
+    public void CalculateShortestPathEmptySourceTest()
+    {
+        string messageText = "{ \"TrackingId\": \"123\", \"Source\": \"\", \"Target\": \"D5\" }";
+        QueueMessage message = QueuesModelFactory.QueueMessage(
+          messageId: "id",
+          popReceipt: "pr",
+          body: BinaryData.FromString(messageText),
+          dequeueCount: 0);
+
+        var logger = new NullLogger<CalculateShortestPath>();
+        CalculateShortestPath function = new(logger);
+        ArgumentException e = Assert.Throws<ArgumentException>(() => function.Run(message));
+        Assert.That(e.Message, Is.EqualTo("The value cannot be an empty string or composed entirely of whitespace. (Parameter 'input.Source')"));
+    }
+
+    [Test]
+    public void CalculateShortestPathEmptyTargetTest()
+    {
+        string messageText = "{ \"TrackingId\": \"123\", \"Source\": \"A1\", \"Target\": \"\" }";
+        QueueMessage message = QueuesModelFactory.QueueMessage(
+          messageId: "id",
+          popReceipt: "pr",
+          body: BinaryData.FromString(messageText),
+          dequeueCount: 0);
+
+        var logger = new NullLogger<CalculateShortestPath>();
+        CalculateShortestPath function = new(logger);
+        ArgumentException e = Assert.Throws<ArgumentException>(() => function.Run(message));
+        Assert.That(e.Message, Is.EqualTo("The value cannot be an empty string or composed entirely of whitespace. (Parameter 'input.Target')"));
+    }
+
+    [Test]
+    public void CalculateShortestPathInvalidJsonTest()
+    {
+        string messageText = "{ Hey I am not valid }";
+        QueueMessage message = QueuesModelFactory.QueueMessage(
+          messageId: "id",
+          popReceipt: "pr",
+          body: BinaryData.FromString(messageText),
+          dequeueCount: 0);
+
+        var logger = new NullLogger<CalculateShortestPath>();
+        CalculateShortestPath function = new(logger);
+        JsonException e = Assert.Throws<JsonException>(() => function.Run(message));
+        Assert.That(e.Message, Is.EqualTo("'H' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 0 | BytePositionInLine: 2."));
     }
 }
