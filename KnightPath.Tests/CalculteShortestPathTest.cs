@@ -11,7 +11,7 @@ public class CalculateShortestPathTest
     [Test]
     public void CalculateShortestPathSuccessTest()
     {
-        Guid trackingId = new Guid();
+        Guid trackingId = new();
         string messageText = "{ \"TrackingId\": \"" + trackingId.ToString() + "\", \"Source\": \"A1\", \"Target\": \"D5\" }";
         QueueMessage message = QueuesModelFactory.QueueMessage(
           messageId: "id2",

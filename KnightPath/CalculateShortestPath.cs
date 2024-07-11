@@ -16,14 +16,6 @@ namespace KnightPath
             _logger = logger;
         }
 
-        // TODO: Move to Common
-        public class CreateKnightPathQueueMessage
-        {
-            public required string TrackingId { get; set; }
-            public required string Source { get; set; }
-            public required string Target { get; set; }
-        }
-
         [Function(nameof(CalculateShortestPath))]
         [SqlOutput("dbo.Paths", connectionStringSetting: "SqlConnectionString")]
         public Path Run([QueueTrigger("knightpathqueue")] QueueMessage message)
