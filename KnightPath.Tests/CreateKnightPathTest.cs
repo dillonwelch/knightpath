@@ -28,30 +28,46 @@ public class CreateKnightPathTest
         var response = await function.RunAsync(mockHttpRequest).ConfigureAwait(false);
 
         Assert.That(response.HttpResponse, Is.InstanceOf(typeof(HttpResponseData)));
-        Assert.That(response.HttpResponse.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-        Assert.That(response.Message, Is.Not.Null);
-        Assert.That(response.Message.Source, Is.EqualTo(body.Source));
-        Assert.That(response.Message.Target, Is.EqualTo(body.Target));
-        Assert.That(Guid.TryParse(response.Message.TrackingId, out Guid val));
+        Assert.Multiple(() =>
+        {
+            Assert.That(response.HttpResponse.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            Assert.That(response.Message, Is.Not.Null);
+        });
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(response.Message.Source, Is.EqualTo(body.Source));
+            Assert.That(response.Message.Target, Is.EqualTo(body.Target));
+            Assert.That(Guid.TryParse(response.Message.TrackingId, out Guid val));
+        });
+
     }
 
-    // [Test]
-    // public async Task KnightMissingParamsTest()
-    // {
-    //     var request = new Mock<HttpRequest>();
-    //     var body = new { Meow = "A1", Woof = "D5" };
-    //     var json = JsonSerializer.Serialize(body);
-    //     var memoryStream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(json));
-    //     request.SetupGet(req => req.Body).Returns(memoryStream);
+    [Test]
+    public async Task KnightMissingParamsTest()
+    {
+        var body = new { Meow = "A1", Woof = "D5" };
+        var json = JsonSerializer.Serialize(body);
 
-    //     var logger = new NullLogger<CreateKnightPath>();
-    //     var function = new CreateKnightPath(logger, _context);
-    //     var response = await function.Run(request.Object);
+        MockHttpRequestData mockHttpRequest =
+          new MockHttpRequestDataBuilder()
+            .WithDefaultJsonSerializer()
+            .WithFakeFunctionContext()
+            .WithRawJsonBody(json)
+            .Build();
 
-    //     Assert.That(response, Is.InstanceOf(typeof(BadRequestObjectResult)));
-    //     var badResult = response as BadRequestObjectResult;
-    //     Assert.That(badResult?.Value?.ToString(), Is.EqualTo("Invalid request params."));
-    // }
+        var logger = new NullLogger<CreateKnightPath>();
+        CreateKnightPath function = new(logger);
+        var response = await function.RunAsync(mockHttpRequest).ConfigureAwait(false);
+
+        Assert.That(response.HttpResponse, Is.InstanceOf(typeof(HttpResponseData)));
+        Assert.Multiple(() =>
+        {
+            Assert.That(response.HttpResponse.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
+            Assert.That(response.Message, Is.Null);
+        });
+
+    }
 
     // // TODO: invalid bad json
     // [Test]
