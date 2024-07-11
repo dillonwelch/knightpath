@@ -15,7 +15,7 @@ namespace KnightPath
         }
 
         [Function("CreateKnightPath")]
-        public IActionResult Run([HttpTrigger(AuthorizationLevel.Admin, "get", "post")] HttpRequest req)
+        public IActionResult Run([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequest req)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
             return new OkObjectResult("Welcome to Azure Functions!");
