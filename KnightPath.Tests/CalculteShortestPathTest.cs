@@ -37,7 +37,6 @@ public class CalculateShortestPathTest
     [Test]
     public void CalculateShortestPathInvalidTrackingIdTest()
     {
-        Guid trackingId = new();
         string messageText = "{ \"TrackingId\": \"123\", \"Source\": \"A1\", \"Target\": \"D5\" }";
         QueueMessage message = QueuesModelFactory.QueueMessage(
           messageId: "id",
@@ -47,16 +46,6 @@ public class CalculateShortestPathTest
 
         var logger = new NullLogger<CalculateShortestPath>();
         CalculateShortestPath function = new(logger);
-        var response = function.Run(message);
-
-        Assert.That(response, Is.InstanceOf(typeof(Path)));
-        Assert.Multiple(() =>
-        {
-            Assert.That(response.SourcePosition, Is.EqualTo("A1"));
-            Assert.That(response.TargetPosition, Is.EqualTo("D5"));
-            Assert.That(response.NumberOfMoves, Is.EqualTo(3));
-            Assert.That(response.TrackingId, Is.EqualTo(trackingId));
-            Assert.That(response.ShortestPath, Is.EqualTo("A1:C2:B4:D5"));
-        });
+        Assert.Throws<ArgumentException>(() => function.Run(message));
     }
 }
