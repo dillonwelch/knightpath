@@ -13,14 +13,11 @@ public class CreateKnightPathTest
     [Test]
     public async Task CreateKnightPathSuccessTest()
     {
-        var body = new { Source = "A1", Target = "D5" };
-        var json = JsonSerializer.Serialize(body);
-
         MockHttpRequestData mockHttpRequest =
           new MockHttpRequestDataBuilder()
             .WithDefaultJsonSerializer()
             .WithFakeFunctionContext()
-            .WithRawJsonBody(json)
+            .WithRawJsonBody("{\"Source\": \"A1\", \"Target\": \"D5\"}")
             .Build();
 
         var logger = new NullLogger<CreateKnightPath>();
@@ -36,8 +33,8 @@ public class CreateKnightPathTest
 
         Assert.Multiple(() =>
         {
-            Assert.That(response.Message.Source, Is.EqualTo(body.Source));
-            Assert.That(response.Message.Target, Is.EqualTo(body.Target));
+            Assert.That(response.Message.Source, Is.EqualTo("A1"));
+            Assert.That(response.Message.Target, Is.EqualTo("D5"));
             Assert.That(Guid.TryParse(response.Message.TrackingId, out Guid val));
         });
 
