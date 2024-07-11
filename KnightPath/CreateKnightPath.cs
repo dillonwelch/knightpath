@@ -53,7 +53,6 @@ namespace KnightPath
 
                 var trackingId = Guid.NewGuid().ToString();
 
-                // TODO: JSON response?
                 var response = req.CreateResponse(HttpStatusCode.OK);
                 response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
                 await response.WriteStringAsync(trackingId).ConfigureAwait(false);
@@ -80,6 +79,7 @@ namespace KnightPath
 
                 var response = req.CreateResponse(HttpStatusCode.BadRequest);
                 response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
+                // NOTE: It would be nice to have different responses for different validation errors.
                 await response.WriteStringAsync("Error processing request body!").ConfigureAwait(false);
 
                 return new MultiResponse()
