@@ -6,6 +6,26 @@ using Microsoft.Extensions.Logging;
 
 namespace KnightPath
 {
+    public class CreateKnightPathRequest
+    {
+        public required string Source { get; set; }
+        public required string Target { get; set; }
+    }
+
+    public class CreateKnightPathQueueMessage
+    {
+        public required string TrackingId { get; set; }
+        public required string Source { get; set; }
+        public required string Target { get; set; }
+    }
+
+    public class MultiResponse
+    {
+        [QueueOutput("knightpathqueue")]
+        public CreateKnightPathQueueMessage? Message { get; set; }
+        public required HttpResponseData HttpResponse { get; set; }
+    }
+
     public class CreateKnightPath
     {
         private readonly ILogger<CreateKnightPath> _logger;
@@ -13,26 +33,6 @@ namespace KnightPath
         public CreateKnightPath(ILogger<CreateKnightPath> logger)
         {
             _logger = logger;
-        }
-
-        public class CreateKnightPathRequest
-        {
-            public required string Source { get; set; }
-            public required string Target { get; set; }
-        }
-
-        public class CreateKnightPathQueueMessage
-        {
-            public required string TrackingId { get; set; }
-            public required string Source { get; set; }
-            public required string Target { get; set; }
-        }
-
-        public class MultiResponse
-        {
-            [QueueOutput("knightpathqueue")]
-            public CreateKnightPathQueueMessage? Message { get; set; }
-            public required HttpResponseData HttpResponse { get; set; }
         }
 
         [Function("CreateKnightPath")]
@@ -44,7 +44,7 @@ namespace KnightPath
             string requestBody = await reader.ReadToEndAsync().ConfigureAwait(false);
             reader.Dispose();
 
-            try 
+            try
             {
                 var input = JsonSerializer.Deserialize<CreateKnightPathRequest>(requestBody);
                 ArgumentNullException.ThrowIfNull(input);
@@ -56,20 +56,20 @@ namespace KnightPath
                 response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
                 await response.WriteStringAsync(trackingId).ConfigureAwait(false);
 
-                CreateKnightPathQueueMessage message = new() 
+                CreateKnightPathQueueMessage message = new()
                 {
                     TrackingId = trackingId,
                     Source = input.Source,
                     Target = input.Target
                 };
 
-                return new MultiResponse() 
+                return new MultiResponse()
                 {
                     Message = message,
                     HttpResponse = response
                 };
             }
-            catch (JsonException ex) 
+            catch (JsonException ex)
             {
                 _logger.LogError("Error deserializing JSON: {Error}", ex.Message);
 
