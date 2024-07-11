@@ -19,12 +19,12 @@ namespace KnightPath
 
         static string MoveListString(int positionX, int positionY)
         {
-            return $"{NumToRow(positionX)}{(positionY + 1)}";
+            return $"{NumToRow(positionX)}{positionY}";
         }
 
         static bool OnBoard(int positionX, int positionY)
         {
-            if (positionX >= 0 && positionY >= 0 && positionX < Rows && positionY < Rows)
+            if (positionX >= 0 && positionY >= 1 && positionX < Rows && positionY <= Rows)
             {
                 return true;
             }
@@ -40,9 +40,9 @@ namespace KnightPath
             ValidatePosition(ending);
 
             int startingX = RowToNum(starting[0]); 
-            int startingY = (int)(Char.GetNumericValue(starting[1]) - 1);
+            int startingY = (int)Char.GetNumericValue(starting[1]);
             int endingX = RowToNum(ending[0]);
-            int endingY = (int)(Char.GetNumericValue(ending[1]) - 1);
+            int endingY = (int)Char.GetNumericValue(ending[1]);
 
             var queue = new Queue<int[]>();
             queue.Enqueue([startingX, startingY]);
