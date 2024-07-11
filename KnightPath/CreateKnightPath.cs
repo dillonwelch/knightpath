@@ -38,7 +38,12 @@ namespace KnightPath
         [Function("CreateKnightPath")]
         public async Task<MultiResponse> RunAsync([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestData req)
         {
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            ArgumentNullException.ThrowIfNull(req);
+
+            StreamReader reader = new(req.Body);
+            string requestBody = await reader.ReadToEndAsync().ConfigureAwait(false);
+            reader.Dispose();
+
             try 
             {
                 var input = JsonSerializer.Deserialize<CreateKnightPathRequest>(requestBody);
@@ -47,7 +52,7 @@ namespace KnightPath
                 // TODO: JSON response?
                 var response = req.CreateResponse(HttpStatusCode.OK);
                 response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
-                await response.WriteStringAsync(trackingId);
+                await response.WriteStringAsync(trackingId).ConfigureAwait(false);
 
                 CreateKnightPathQueueMessage message = new() 
                 {
