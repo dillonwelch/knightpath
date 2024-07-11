@@ -31,9 +31,9 @@ namespace KnightPath
         public static List<string> CalculateShortestPath(string starting, string ending, int rows = 8, int columns = 8)
         {
             int startingX = boardMapping[starting[0].ToString()];
-            int startingY = Int32.Parse(starting[1].ToString()) - 1;
+            int startingY = (int)(Char.GetNumericValue(starting[1]) - 1);
             int endingX = boardMapping[ending[0].ToString()];
-            int endingY = Int32.Parse(ending[1].ToString()) - 1;
+            int endingY = (int)(Char.GetNumericValue(ending[1]) - 1);
             var queue = new Queue<int[]>();
             queue.Enqueue([startingX, startingY]);
 
