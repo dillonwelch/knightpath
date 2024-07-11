@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
@@ -14,13 +15,26 @@ namespace KnightPath
             _logger = logger;
         }
 
+        public class CreateKnightPathRequest
+        {
+            public string? Source { get; set; }
+            public string? Target { get; set; }
+        }
+
         [Function("CreateKnightPath")]
         [QueueOutput("knightpathqueue")]    
         public async Task<IActionResult> RunAsync([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequest req)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            return new OkObjectResult("Welcome to Azure Functions: " + requestBody);
+            var input = JsonSerializer.Deserialize<CreateKnightPathRequest>(requestBody);
+            var trackingId = Guid.NewGuid().ToString();
+
+            return new OkObjectResult(new {
+                TrackingId = trackingId,
+                Source = input.Source,
+                Target = input.Target
+            });
         }
     }
 }
