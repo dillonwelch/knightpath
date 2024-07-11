@@ -6,7 +6,7 @@ namespace KnightPath
       {
           { "A", 0 }, { "B", 1 }, { "C", 2 }, { "D", 3 }, { "E", 4 }, { "F", 5 }, { "G", 6 }, { "H", 7 },
       };
-      static readonly List<string> boardMappingKeys = boardMapping.Keys.ToList();
+      static readonly List<string> boardMappingKeys = [.. boardMapping.Keys];
       static readonly int[] dx = [-2, -1, 1, 2, -2, -1, 1, 2];
       static readonly int[] dy = [-1, -2, -2, -1, 1, 2, 2, 1];
 
@@ -37,12 +37,12 @@ namespace KnightPath
           var queue = new Queue<int[]>();
           queue.Enqueue([startingX, startingY]);
 
-          Dictionary<int, Dictionary<int, List<string>>> moveList = new Dictionary<int, Dictionary<int, List<string>>>();
+          Dictionary<int, Dictionary<int, List<string>>> moveList = [];
           for (int row = 0; row < rows; row++)
           {
-              moveList[row] = new Dictionary<int, List<string>>();
+              moveList[row] = [];
           }
-          moveList[startingX][startingY] = new List<string>() { MoveListString(startingX, startingY) };
+          moveList[startingX][startingY] = [MoveListString(startingX, startingY)];
 
           while(queue.Count > 0)
           {
@@ -61,14 +61,16 @@ namespace KnightPath
                   var newY = currentY + dy[position];
                   if(OnBoard(newX, newY, rows, columns) && !moveList[newX].ContainsKey(newY))
                   {
-                      moveList[newX][newY] = new List<string>(moveList[currentX][currentY]);
-                      moveList[newX][newY].Add(MoveListString(newX, newY));
+                      moveList[newX][newY] = new List<string>(moveList[currentX][currentY])
+                      {
+                          MoveListString(newX, newY)
+                      };
                       queue.Enqueue([newX, newY]);
                   }
               }
           }
 
-          return new List<string>();
+          return [];
       }
   }
 }
