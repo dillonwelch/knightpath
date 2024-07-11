@@ -1,6 +1,6 @@
 namespace KnightPath
 {
-    public class ShortestPathCalculator
+    public static class ShortestPathCalculator
     {
         static readonly Dictionary<string, int> boardMapping = new Dictionary<string, int>()
       {
@@ -32,6 +32,10 @@ namespace KnightPath
 
         public static IList<string> CalculateShortestPath(string starting, string ending)
         {
+            // TODO: How to validate A1 vs 99
+            ArgumentNullException.ThrowIfNull(starting);
+            ArgumentNullException.ThrowIfNull(ending);
+
             int startingX = boardMapping[starting[0].ToString()];
             int startingY = (int)(Char.GetNumericValue(starting[1]) - 1);
             int endingX = boardMapping[ending[0].ToString()];
