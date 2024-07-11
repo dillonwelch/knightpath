@@ -20,31 +20,42 @@ namespace KnightPath
         [SqlOutput("dbo.Paths", connectionStringSetting: "SqlConnectionString")]
         public Path Run([QueueTrigger("knightpathqueue")] QueueMessage message)
         {
-            // TODO: Catch errors
-            ArgumentNullException.ThrowIfNull(message);
-            var input = JsonSerializer.Deserialize<CreateKnightPathQueueMessage>(message.MessageText);
-            ArgumentNullException.ThrowIfNull(input);
-            var shortestPath = ShortestPathCalculator.CalculateShortestPath(input.Source, input.Target);
-            var stringPath = String.Join(":", shortestPath);
-
-            var rawTrackingId = input.TrackingId;
-            if (!Guid.TryParse(rawTrackingId, out Guid trackingId))
+            try
             {
-                // TODO: How to handle
+                // TODO: Catch errors
+                ArgumentNullException.ThrowIfNull(message);
+                var input = JsonSerializer.Deserialize<CreateKnightPathQueueMessage>(message.MessageText);
+                ArgumentNullException.ThrowIfNull(input);
+                ArgumentException.ThrowIfNullOrWhiteSpace(input.Source);
+                ArgumentException.ThrowIfNullOrWhiteSpace(input.Target);
+
+                if (Guid.TryParse(input.TrackingId, out Guid trackingId))
+                {
+                    var shortestPath = ShortestPathCalculator.CalculateShortestPath(input.Source, input.Target);
+                    var stringPath = String.Join(":", shortestPath);
+
+                    return new Path() {
+                        SourcePosition = input.Source,
+                        TargetPosition = input.Target,
+                        TrackingId = trackingId,
+                        NumberOfMoves = shortestPath.Count - 1,
+                        ShortestPath = stringPath
+                    };
+                }
+                else
+                {
+                    throw new ArgumentException("TrackingId '{RawTrackingId}' is not a Guid.", input.TrackingId);
+                }
+            }
+            catch (Exception e) 
+            {
                 // NOTE: Unclear how to best implement the solution.
                 # pragma warning disable CA1848
-                _logger.LogError("Invalid id format: {RawTrackingId}", rawTrackingId);
-                # pragma warning restore CA1848
-                // return new BadRequestObjectResult("Invalid id format.");
-            }
+                _logger.LogError("Error when processing QueueMessage: {Error}", e.Message);
+                #pragma warning restore CA1848
 
-            return new Path() {
-                SourcePosition = input.Source,
-                TargetPosition = input.Target,
-                TrackingId = trackingId,
-                NumberOfMoves = shortestPath.Count - 1,
-                ShortestPath = stringPath
-            };
+                throw;
+            }
         }
     }
 }
