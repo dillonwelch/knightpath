@@ -1,5 +1,3 @@
-using System.Collections.ObjectModel;
-using System.Configuration;
 using static KnightPath.ChessBoard;
 
 namespace KnightPath

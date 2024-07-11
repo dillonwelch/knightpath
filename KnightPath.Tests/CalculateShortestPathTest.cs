@@ -78,7 +78,7 @@ public class CalculateShortestPathTest
         var logger = new NullLogger<CalculateShortestPath>();
         CalculateShortestPath function = new(logger);
         ArgumentException e = Assert.Throws<ArgumentException>(() => function.Run(message));
-        Assert.That(e.Message, Is.EqualTo("The value cannot be an empty string or composed entirely of whitespace. (Parameter 'input.Source')"));
+        Assert.That(e.Message, Is.EqualTo("The value cannot be an empty string or composed entirely of whitespace. (Parameter 'position')"));
     }
 
     [Test]
@@ -94,7 +94,7 @@ public class CalculateShortestPathTest
         var logger = new NullLogger<CalculateShortestPath>();
         CalculateShortestPath function = new(logger);
         ArgumentException e = Assert.Throws<ArgumentException>(() => function.Run(message));
-        Assert.That(e.Message, Is.EqualTo("The value cannot be an empty string or composed entirely of whitespace. (Parameter 'input.Target')"));
+        Assert.That(e.Message, Is.EqualTo("The value cannot be an empty string or composed entirely of whitespace. (Parameter 'position')"));
     }
 
     [Test]

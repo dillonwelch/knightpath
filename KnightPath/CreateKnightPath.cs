@@ -3,6 +3,7 @@ using System.Text.Json;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
+using static KnightPath.ChessBoard;
 
 namespace KnightPath
 {
@@ -47,9 +48,9 @@ namespace KnightPath
             try
             {
                 var input = JsonSerializer.Deserialize<CreateKnightPathRequest>(requestBody);
-                // TODO: Validate it matches the A1 pattern
-                ArgumentNullException.ThrowIfNullOrWhiteSpace(input?.Source);
-                ArgumentNullException.ThrowIfNullOrWhiteSpace(input?.Target);
+                ArgumentNullException.ThrowIfNull(input);
+                ValidatePosition(input.Source);
+                ValidatePosition(input.Target);
 
                 var trackingId = Guid.NewGuid().ToString();
 

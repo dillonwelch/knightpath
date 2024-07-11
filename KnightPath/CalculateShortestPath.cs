@@ -3,6 +3,7 @@ using Azure.Storage.Queues.Models;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Extensions.Sql;
 using Microsoft.Extensions.Logging;
+using static KnightPath.ChessBoard;
 
 namespace KnightPath
 {
@@ -24,9 +25,8 @@ namespace KnightPath
                 ArgumentNullException.ThrowIfNull(message);
                 var input = JsonSerializer.Deserialize<CreateKnightPathQueueMessage>(message.MessageText);
                 ArgumentNullException.ThrowIfNull(input);
-                // TODO: Validate A1 pattern.
-                ArgumentException.ThrowIfNullOrWhiteSpace(input.Source);
-                ArgumentException.ThrowIfNullOrWhiteSpace(input.Target);
+                ValidatePosition(input.Source);
+                ValidatePosition(input.Target);
 
                 if (Guid.TryParse(input.TrackingId, out Guid trackingId))
                 {
