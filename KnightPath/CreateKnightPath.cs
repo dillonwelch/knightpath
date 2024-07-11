@@ -68,6 +68,7 @@ namespace KnightPath
 
                 var response = req.CreateResponse(HttpStatusCode.BadRequest);
                 response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
+                // TODO: Better response
                 await response.WriteStringAsync("oh no!");
 
                 return new MultiResponse()

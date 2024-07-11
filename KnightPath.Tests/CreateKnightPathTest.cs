@@ -1,4 +1,5 @@
 // using Microsoft.Extensions.Logging.Abstractions;
+using System.Net;
 using System.Text.Json;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -28,6 +29,13 @@ public class CreateKnightPathTest
         var logger = new NullLogger<CreateKnightPath>();
         CreateKnightPath function = new(logger);
         var response = await function.RunAsync(mockHttpRequest);
+
+        Assert.That(response.HttpResponse, Is.InstanceOf(typeof(HttpResponseData)));
+        Assert.That(response.HttpResponse.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+        Assert.That(response.Message, Is.Not.Null);
+        Assert.That(response.Message.Source, Is.EqualTo(body.Source));
+        Assert.That(response.Message.Target, Is.EqualTo(body.Target));
+        Assert.That(Guid.TryParse(response.Message.TrackingId, out Guid val));
 
         // Assert.That(response, Is.InstanceOf(typeof(OkObjectResult)));
 
