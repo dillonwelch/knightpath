@@ -30,7 +30,7 @@ namespace KnightPath
             }
         }
 
-        public static List<string> CalculateShortestPath(string starting, string ending)
+        public static IList<string> CalculateShortestPath(string starting, string ending)
         {
             int startingX = boardMapping[starting[0].ToString()];
             int startingY = (int)(Char.GetNumericValue(starting[1]) - 1);
