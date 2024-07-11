@@ -40,9 +40,6 @@ namespace KnightPath
         [Function("CreateKnightPath")]
         public async Task<MultiResponse> RunAsync([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestData req)
         {
-            // TODO: Better logs
-            _logger.LogInformation("C# HTTP trigger function processed a request.");
-
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             try 
             {
