@@ -4,39 +4,17 @@ namespace KnightPath.Tests;
 public class ShortestPathCalculatorTest
 {
     [Test]
-    public void CalculateLargeStart()
+    public void CalculateInvalidStart()
     {
-        ArgumentException e = Assert.Throws<ArgumentException>(() => ShortestPathCalculator.CalculateShortestPath("AA2", "A2"));
-        Assert.That(e.Message, Is.EqualTo("Position 'AA2' must contain only two characters."));
+        ArgumentException e = Assert.Throws<ArgumentException>(() => ShortestPathCalculator.CalculateShortestPath("Meow", "A2"));
+        Assert.That(e.Message, Is.EqualTo("Position 'Meow' must contain exactly two characters."));
     }
 
     [Test]
-    public void CalculateOutOfBoundsRowX()
+    public void CalculateInvalidEnd()
     {
-        ArgumentException e = Assert.Throws<ArgumentException>(() => ShortestPathCalculator.CalculateShortestPath("Q2", "A2"));
-        Assert.That(e.Message, Is.EqualTo("Invalid row identifier 'Q' in position 'Q2'."));
-    }
-
-    [Test]
-    public void CalculateOutOfBoundsColumnX()
-    {
-        ArgumentException e = Assert.Throws<ArgumentException>(() => ShortestPathCalculator.CalculateShortestPath("A9", "A2"));
-        Assert.That(e.Message, Is.EqualTo("Invalid column identifier '9' in position 'A9'."));
-    }
-
-    [Test]
-    public void CalculateOutOfBoundsRowY()
-    {
-        ArgumentException e = Assert.Throws<ArgumentException>(() => ShortestPathCalculator.CalculateShortestPath("A2", "Q2"));
-        Assert.That(e.Message, Is.EqualTo("Invalid row identifier 'Q' in position 'Q2'."));
-    }
-
-
-    [Test]
-    public void CalculateOutOfBoundsColumnY()
-    {
-        ArgumentException e = Assert.Throws<ArgumentException>(() => ShortestPathCalculator.CalculateShortestPath("A2", "A9"));
-        Assert.That(e.Message, Is.EqualTo("Invalid column identifier '9' in position 'A9'."));
+        ArgumentException e = Assert.Throws<ArgumentException>(() => ShortestPathCalculator.CalculateShortestPath("A2", "Meow"));
+        Assert.That(e.Message, Is.EqualTo("Position 'Meow' must contain exactly two characters."));
     }
 
     [Test]

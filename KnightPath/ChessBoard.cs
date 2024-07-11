@@ -8,9 +8,9 @@ namespace KnightPath
         {
             ArgumentNullException.ThrowIfNullOrWhiteSpace(position);
 
-            if (position.Length > 2)
+            if (position.Length != 2)
             {
-              throw new ArgumentException($"Position '{position}' must contain only two characters.");
+              throw new ArgumentException($"Position '{position}' must contain exactly two characters.");
             }
 
             if (!Char.IsBetween(position[0], 'A', 'H'))
