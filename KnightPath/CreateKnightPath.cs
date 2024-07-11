@@ -71,12 +71,15 @@ namespace KnightPath
             }
             catch (JsonException ex)
             {
+                // NOTE: Unclear how to best implement the solution.
+                # pragma warning disable CA1848
                 _logger.LogError("Error deserializing JSON: {Error}", ex.Message);
+                # pragma warning restore CA1848
 
                 var response = req.CreateResponse(HttpStatusCode.BadRequest);
                 response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
                 // TODO: Better response
-                await response.WriteStringAsync("oh no!");
+                await response.WriteStringAsync("oh no!").ConfigureAwait(false);
 
                 return new MultiResponse()
                 {
