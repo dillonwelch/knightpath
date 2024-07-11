@@ -17,7 +17,7 @@ namespace KnightPath
 
         [Function("FindKnightPath")]
         public static async Task<HttpResponseData> RunAsync(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get")]
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "knightpath")]
             HttpRequestData req,
             [SqlInput(commandText: "select * from dbo.Paths where TrackingId = @TrackingId",
                 commandType: System.Data.CommandType.Text,

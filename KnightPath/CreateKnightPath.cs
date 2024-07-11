@@ -36,7 +36,7 @@ namespace KnightPath
         }
 
         [Function("CreateKnightPath")]
-        public async Task<MultiResponse> RunAsync([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestData req)
+        public async Task<MultiResponse> RunAsync([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "knightpath")] HttpRequestData req)
         {
             ArgumentNullException.ThrowIfNull(req);
 
