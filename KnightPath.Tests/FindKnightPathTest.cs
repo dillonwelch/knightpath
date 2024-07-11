@@ -33,11 +33,18 @@ public class FindKnightPathTest
         var response = await function.RunAsync(mockHttpRequest, [path]).ConfigureAwait(false);
 
         Assert.That(response, Is.InstanceOf(typeof(HttpResponseData)));
-        // Assert.Multiple(() =>
-        // {
-        //     Assert.That(response.HttpResponse.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-        //     Assert.That(response.Message, Is.Not.Null);
-        // });
+
+        response.Body.Seek(0, SeekOrigin.Begin);
+        var reader = new StreamReader(response.Body);
+        var streamText = await reader.ReadToEndAsync().ConfigureAwait(false);
+        reader.Dispose();
+        string json = "{\"Starting\":\"A1\",\"Ending\":\"D5\",\"ShortestPath\":\"A1:C2:B4:D5\",\"NumberOfMoves\":3,\"OperationId\":\"" + operationId.ToString() + "\"}";
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            Assert.That(streamText, Is.EqualTo(json));
+        });
 
         // Assert.Multiple(() =>
         // {
