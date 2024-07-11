@@ -10,15 +10,17 @@ namespace KnightPath
         static readonly int[] dx = [-2, -1, 1, 2, -2, -1, 1, 2];
         static readonly int[] dy = [-1, -2, -2, -1, 1, 2, 2, 1];
 
+        const int ROWS = 8, COLUMNS = 8;
+
         static string MoveListString(int positionX, int positionY)
         {
             return $"{boardMappingKeys[positionX]}{(positionY + 1)}";
         }
 
         // TODO: Only need public for tests.
-        public static bool OnBoard(int positionX, int positionY, int rows, int columns)
+        public static bool OnBoard(int positionX, int positionY)
         {
-            if (positionX >= 0 && positionY >= 0 && positionX < rows && positionY < columns)
+            if (positionX >= 0 && positionY >= 0 && positionX < ROWS && positionY < COLUMNS)
             {
                 return true;
             }
@@ -28,7 +30,7 @@ namespace KnightPath
             }
         }
 
-        public static List<string> CalculateShortestPath(string starting, string ending, int rows = 8, int columns = 8)
+        public static List<string> CalculateShortestPath(string starting, string ending)
         {
             int startingX = boardMapping[starting[0].ToString()];
             int startingY = (int)(Char.GetNumericValue(starting[1]) - 1);
@@ -38,7 +40,7 @@ namespace KnightPath
             queue.Enqueue([startingX, startingY]);
 
             Dictionary<int, Dictionary<int, List<string>>> moveList = [];
-            for (int row = 0; row < rows; row++)
+            for (int row = 0; row < ROWS; row++)
             {
                 moveList[row] = [];
             }
@@ -59,7 +61,7 @@ namespace KnightPath
                 {
                     var newX = currentX + dx[position];
                     var newY = currentY + dy[position];
-                    if (OnBoard(newX, newY, rows, columns) && !moveList[newX].ContainsKey(newY))
+                    if (OnBoard(newX, newY) && !moveList[newX].ContainsKey(newY))
                     {
                         moveList[newX][newY] = new List<string>(moveList[currentX][currentY])
                       {
