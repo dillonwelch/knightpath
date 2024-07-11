@@ -44,7 +44,7 @@ namespace KnightPath
             int endingX = RowToNum(ending[0]);
             int endingY = (int)Char.GetNumericValue(ending[1]);
 
-            var queue = new Queue<int[]>();
+            Queue<int[]> queue = new();
             queue.Enqueue([startingX, startingY]);
 
             Dictionary<int, Dictionary<int, List<string>>> moveList = [];
@@ -56,9 +56,9 @@ namespace KnightPath
 
             while (queue.Count > 0)
             {
-                var current = queue.Dequeue();
-                var currentX = current[0];
-                var currentY = current[1];
+                int[] current = queue.Dequeue();
+                int currentX = current[0];
+                int currentY = current[1];
 
                 if (currentX == endingX && currentY == endingY)
                 {
