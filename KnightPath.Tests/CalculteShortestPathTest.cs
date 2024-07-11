@@ -2,14 +2,12 @@ using System.Net;
 using Azure.Storage.Queues.Models;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging.Abstractions;
-using Moq; // TODO: Remove?
 
 namespace KnightPath.Tests;
   
 [TestFixture]
 public class CalculateShortestPathTest
 {
-    // NOTE: I would love to be testing the response body content but I can't figure out how :(
     [Test]
     public void CalculateShortestPathSuccessTest()
     {

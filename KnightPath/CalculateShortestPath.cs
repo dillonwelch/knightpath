@@ -28,7 +28,10 @@ namespace KnightPath
         [SqlOutput("dbo.Paths", connectionStringSetting: "SqlConnectionString")]
         public Path Run([QueueTrigger("knightpathqueue")] QueueMessage message)
         {
+            // TODO: Catch errors
+            ArgumentNullException.ThrowIfNull(message);
             var input = JsonSerializer.Deserialize<CreateKnightPathQueueMessage>(message.MessageText);
+            ArgumentNullException.ThrowIfNull(input);
             var shortestPath = ShortestPathCalculator.CalculateShortestPath(input.Source, input.Target);
             var stringPath = String.Join(":", shortestPath);
 
@@ -36,11 +39,12 @@ namespace KnightPath
             if (!Guid.TryParse(rawTrackingId, out Guid trackingId))
             {
                 // TODO: How to handle
-                _logger.LogError($"Invalid id format: {rawTrackingId}");
+                // NOTE: Unclear how to best implement the solution.
+                # pragma warning disable CA1848
+                _logger.LogError("Invalid id format: {RawTrackingId}", rawTrackingId);
+                # pragma warning restore CA1848
                 // return new BadRequestObjectResult("Invalid id format.");
             }
-
-            _logger.LogInformation("Shortest path is '{ShortestPath}'", stringPath);
 
             return new Path() {
                 SourcePosition = input.Source,
