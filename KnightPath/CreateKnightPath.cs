@@ -71,17 +71,16 @@ namespace KnightPath
                     HttpResponse = response
                 };
             }
-            catch (JsonException ex)
+            catch (Exception e) when (e is ArgumentException || e is ArgumentNullException || e is JsonException)
             {
                 // NOTE: Unclear how to best implement the solution.
                 # pragma warning disable CA1848
-                _logger.LogError("Error deserializing JSON: {Error}", ex.Message);
+                _logger.LogError("Error processing request body: {Error}", e.Message);
                 # pragma warning restore CA1848
 
                 var response = req.CreateResponse(HttpStatusCode.BadRequest);
                 response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
-                // TODO: Better response
-                await response.WriteStringAsync("oh no!").ConfigureAwait(false);
+                await response.WriteStringAsync("Error processing request body!").ConfigureAwait(false);
 
                 return new MultiResponse()
                 {
