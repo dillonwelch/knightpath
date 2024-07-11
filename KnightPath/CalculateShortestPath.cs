@@ -1,4 +1,3 @@
-using System;
 using System.Text.Json;
 using Azure.Storage.Queues.Models;
 using Microsoft.Azure.Functions.Worker;

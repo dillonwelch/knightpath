@@ -1,7 +1,5 @@
-using System.Net;
 using System.Text.Json;
 using Azure.Storage.Queues.Models;
-using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging.Abstractions;
 
 namespace KnightPath.Tests;
