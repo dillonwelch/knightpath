@@ -28,18 +28,27 @@ namespace KnightPath
             IEnumerable<Path> path)
         {
             var result = path.FirstOrDefault();
-            var json = new {
-                Starting = result.SourcePosition,
-                Ending = result.TargetPosition,
-                ShortestPath = result.ShortestPath,
-                NumberOfMoves = result.NumberOfMoves,
-                OperationId = result.TrackingId
-            };
 
-            var response = req.CreateResponse(HttpStatusCode.OK);
-            await response.WriteAsJsonAsync(json);
+            if (result is not null)
+            {
+                var json = new {
+                    Starting = result.SourcePosition,
+                    Ending = result.TargetPosition,
+                    ShortestPath = result.ShortestPath,
+                    NumberOfMoves = result.NumberOfMoves,
+                    OperationId = result.TrackingId
+                };
 
-            return response;
+                var response = req.CreateResponse(HttpStatusCode.OK);
+                await response.WriteAsJsonAsync(json);
+
+                return response;
+            }
+            else
+            {
+                var response = req.CreateResponse(HttpStatusCode.NotFound);
+                return response;
+            }
         }
     }
 }

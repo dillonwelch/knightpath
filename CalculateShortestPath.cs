@@ -28,12 +28,7 @@ namespace KnightPath
         [SqlOutput("dbo.Paths", connectionStringSetting: "SqlConnectionString")]
         public Path Run([QueueTrigger("knightpathqueue")] QueueMessage message)
         {
-            _logger.LogInformation($"C# Queue trigger function processed: {message.MessageText}");
-
             var input = JsonSerializer.Deserialize<CreateKnightPathQueueMessage>(message.MessageText);
-
-            // _logger.LogInformation("Source {Source} and Target {Target} and Tracking ID {TrackingId}", input.Source, input.Target, input.TrackingId);
-
             var shortestPath = ShortestPathCalculator.CalculateShortestPath(input.Source, input.Target);
             var stringPath = String.Join(":", shortestPath);
 
