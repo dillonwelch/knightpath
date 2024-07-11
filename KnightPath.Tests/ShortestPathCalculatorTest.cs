@@ -4,6 +4,13 @@ namespace KnightPath.Tests;
 public class ShortestPathCalculatorTest
 {
     [Test]
+    public void CalculateLargeStart()
+    {
+        ArgumentException e = Assert.Throws<ArgumentException>(() => ShortestPathCalculator.CalculateShortestPath("AA2", "A2"));
+        Assert.That(e.Message, Is.EqualTo("Position 'AA2' must contain only two characters."));
+    }
+
+    [Test]
     public void CalculateOutOfBoundsRowX()
     {
         ArgumentException e = Assert.Throws<ArgumentException>(() => ShortestPathCalculator.CalculateShortestPath("Q2", "A2"));
