@@ -2,7 +2,6 @@ using System.Net;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging.Abstractions;
 using static KnightPath.Tests.TestHelpers;
-using Moq; // TODO: Remove Moq?
 
 namespace KnightPath.Tests;
   
