@@ -1,13 +1,13 @@
 using System.Net;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging.Abstractions;
+using static KnightPath.Tests.TestHelpers;
 
 namespace KnightPath.Tests;
   
 [TestFixture]
 public class FindKnightPathTest
 {
-    // NOTE: I would love to be testing the response body content but I can't figure out how :(
     [Test]
     public async Task FindKnightPathSuccessTest()
     {
@@ -34,10 +34,7 @@ public class FindKnightPathTest
 
         Assert.That(response, Is.InstanceOf(typeof(HttpResponseData)));
 
-        response.Body.Seek(0, SeekOrigin.Begin);
-        var reader = new StreamReader(response.Body);
-        var streamText = await reader.ReadToEndAsync().ConfigureAwait(false);
-        reader.Dispose();
+        var streamText = await ReadBody(response.Body).ConfigureAwait(false);
         string json = "{\"Starting\":\"A1\",\"Ending\":\"D5\",\"ShortestPath\":\"A1:C2:B4:D5\",\"NumberOfMoves\":3,\"OperationId\":\"" + operationId.ToString() + "\"}";
 
         Assert.Multiple(() =>
