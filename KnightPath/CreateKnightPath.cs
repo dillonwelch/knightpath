@@ -23,6 +23,7 @@ namespace KnightPath
     public class MultiResponse
     {
         // TODO: Const
+        // TODO: making a change
         [QueueOutput("knightpathqueue")]
         public CreateKnightPathQueueMessage? Message { get; set; }
         public required HttpResponseData HttpResponse { get; set; }
