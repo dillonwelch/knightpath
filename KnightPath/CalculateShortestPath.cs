@@ -20,7 +20,6 @@ namespace KnightPath
         [SqlOutput("dbo.Paths", connectionStringSetting: "SqlConnectionString")]
         public Path Run([QueueTrigger("knightpathqueue")] QueueMessage message)
         {
-            _logger.LogInformation("Starting to calculate...");
             try
             {
                 ArgumentNullException.ThrowIfNull(message);
@@ -32,8 +31,6 @@ namespace KnightPath
                 Guid trackingId = Guid.Parse(input.TrackingId);
                 IList<string> shortestPath = ShortestPathCalculator.CalculateShortestPath(input.Source, input.Target);
                 string stringPath = string.Join(":", shortestPath);
-
-                _logger.LogInformation("Finished calculating...");
 
                 return new Path() {
                     SourcePosition = input.Source,
