@@ -29,7 +29,8 @@ namespace KnightPath
 
             if (result is not null)
             {
-                var json = new {
+                var json = new
+                {
                     Starting = result.SourcePosition,
                     Ending = result.TargetPosition,
                     result.ShortestPath,

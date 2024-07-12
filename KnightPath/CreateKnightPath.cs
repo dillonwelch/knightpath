@@ -76,9 +76,9 @@ namespace KnightPath
             catch (Exception e) when (e is ArgumentException || e is ArgumentNullException || e is JsonException)
             {
                 // NOTE: Unclear how to best implement the solution.
-                # pragma warning disable CA1848
+#pragma warning disable CA1848
                 _logger.LogError("Error processing request body: {Error}", e.Message);
-                # pragma warning restore CA1848
+#pragma warning restore CA1848
 
                 HttpResponseData response = req.CreateResponse(HttpStatusCode.BadRequest);
                 response.Headers.Add("Content-Type", "text/plain; charset=utf-8");

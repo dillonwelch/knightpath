@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using static KnightPath.Tests.TestHelpers;
 
 namespace KnightPath.Tests;
-  
+
 [TestFixture]
 public class CreateKnightPathTest
 {

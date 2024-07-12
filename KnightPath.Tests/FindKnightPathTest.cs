@@ -4,54 +4,55 @@ using Microsoft.Extensions.Logging.Abstractions;
 using static KnightPath.Tests.TestHelpers;
 
 namespace KnightPath.Tests;
-  
+
 [TestFixture]
 public class FindKnightPathTest
 {
-    [Test]
-    public async Task FindKnightPathSuccessTest()
+  [Test]
+  public async Task FindKnightPathSuccessTest()
+  {
+    Guid operationId = Guid.NewGuid();
+
+    MockHttpRequestData mockHttpRequest =
+      new MockHttpRequestDataBuilder()
+        .WithDefaultJsonSerializer()
+        .WithFakeFunctionContext()
+        .WithRawJsonBody("")
+        .Build();
+
+    Path path = new()
     {
-        Guid operationId = Guid.NewGuid();
+      SourcePosition = "A1",
+      TargetPosition = "D5",
+      ShortestPath = "A1:C2:B4:D5",
+      NumberOfMoves = 3,
+      TrackingId = operationId
+    };
 
-        MockHttpRequestData mockHttpRequest =
-          new MockHttpRequestDataBuilder()
-            .WithDefaultJsonSerializer()
-            .WithFakeFunctionContext()
-            .WithRawJsonBody("")
-            .Build();
+    HttpResponseData response = await FindKnightPath.RunAsync(mockHttpRequest, [path]).ConfigureAwait(false);
 
-        Path path = new () {
-          SourcePosition = "A1",
-          TargetPosition = "D5",
-          ShortestPath = "A1:C2:B4:D5",
-          NumberOfMoves = 3,
-          TrackingId = operationId
-        };
+    string streamText = await ReadBody(response.Body).ConfigureAwait(false);
+    string json = "{\"Starting\":\"A1\",\"Ending\":\"D5\",\"ShortestPath\":\"A1:C2:B4:D5\",\"NumberOfMoves\":3,\"OperationId\":\"" + operationId.ToString() + "\"}";
 
-        HttpResponseData response = await FindKnightPath.RunAsync(mockHttpRequest, [path]).ConfigureAwait(false);
-
-        string streamText = await ReadBody(response.Body).ConfigureAwait(false);
-        string json = "{\"Starting\":\"A1\",\"Ending\":\"D5\",\"ShortestPath\":\"A1:C2:B4:D5\",\"NumberOfMoves\":3,\"OperationId\":\"" + operationId.ToString() + "\"}";
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            Assert.That(streamText, Is.EqualTo(json));
-        });
-    }
-
-    [Test]
-    public async Task FindKnightPathNotFoundTest()
+    Assert.Multiple(() =>
     {
-        MockHttpRequestData mockHttpRequest =
-          new MockHttpRequestDataBuilder()
-            .WithDefaultJsonSerializer()
-            .WithFakeFunctionContext()
-            .WithRawJsonBody("")
-            .Build();
+      Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+      Assert.That(streamText, Is.EqualTo(json));
+    });
+  }
 
-        HttpResponseData response = await FindKnightPath.RunAsync(mockHttpRequest, []).ConfigureAwait(false);
+  [Test]
+  public async Task FindKnightPathNotFoundTest()
+  {
+    MockHttpRequestData mockHttpRequest =
+      new MockHttpRequestDataBuilder()
+        .WithDefaultJsonSerializer()
+        .WithFakeFunctionContext()
+        .WithRawJsonBody("")
+        .Build();
 
-        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
-    }
+    HttpResponseData response = await FindKnightPath.RunAsync(mockHttpRequest, []).ConfigureAwait(false);
+
+    Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+  }
 }
