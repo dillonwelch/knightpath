@@ -11,8 +11,7 @@ public class CreateKnightPathTest
     [Test]
     public async Task CreateKnightPathSuccessTest()
     {
-        MockHttpRequestData mockHttpRequest =
-          new MockHttpRequestDataBuilder()
+        MockHttpRequestData mockHttpRequest = new MockHttpRequestDataBuilder()
             .WithDefaultJsonSerializer()
             .WithFakeFunctionContext()
             .WithRawJsonBody("{\"Source\": \"A1\", \"Target\": \"D5\"}")
@@ -35,14 +34,12 @@ public class CreateKnightPathTest
             Assert.That(response.Message.Target, Is.EqualTo("D5"));
             Assert.That(Guid.TryParse(response.Message.TrackingId, out Guid val));
         });
-
     }
 
     [Test]
     public async Task CreateKnightPathMissingParamsTest()
     {
-        MockHttpRequestData mockHttpRequest =
-          new MockHttpRequestDataBuilder()
+        MockHttpRequestData mockHttpRequest = new MockHttpRequestDataBuilder()
             .WithDefaultJsonSerializer()
             .WithFakeFunctionContext()
             .WithRawJsonBody("{\"Meow\": \"A1\", \"Woof\": \"D5\"}")
@@ -63,8 +60,7 @@ public class CreateKnightPathTest
     [Test]
     public async Task CreateKnightPathEmptyParamTest()
     {
-        MockHttpRequestData mockHttpRequest =
-          new MockHttpRequestDataBuilder()
+        MockHttpRequestData mockHttpRequest = new MockHttpRequestDataBuilder()
             .WithDefaultJsonSerializer()
             .WithFakeFunctionContext()
             .WithRawJsonBody("{\"Source\": \"A1\", \"Target\": \"\"}")
@@ -85,8 +81,7 @@ public class CreateKnightPathTest
     [Test]
     public async Task CreateKnightPathInvalidJsonTest()
     {
-        MockHttpRequestData mockHttpRequest =
-          new MockHttpRequestDataBuilder()
+        MockHttpRequestData mockHttpRequest = new MockHttpRequestDataBuilder()
             .WithDefaultJsonSerializer()
             .WithFakeFunctionContext()
             .WithRawJsonBody("{slakfjldkjafoiwjefoiwqjfeoij}")
@@ -102,14 +97,12 @@ public class CreateKnightPathTest
             Assert.That(streamText, Is.EqualTo("Error processing request body!"));
             Assert.That(response.Message, Is.Null);
         });
-
     }
 
     [Test]
     public async Task CreateKnightPathEmptyBodyTest()
     {
-        MockHttpRequestData mockHttpRequest =
-          new MockHttpRequestDataBuilder()
+        MockHttpRequestData mockHttpRequest = new MockHttpRequestDataBuilder()
             .WithDefaultJsonSerializer()
             .WithFakeFunctionContext()
             .WithRawJsonBody("")
@@ -127,4 +120,3 @@ public class CreateKnightPathTest
         });
     }
 }
-

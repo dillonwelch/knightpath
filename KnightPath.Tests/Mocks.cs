@@ -15,10 +15,8 @@ public sealed class MockHttpRequestData : HttpRequestData
 {
     private readonly FunctionContext context;
 
-    public MockHttpRequestData(
-        FunctionContext context,
-        string body)
-            : base(context)
+    public MockHttpRequestData(FunctionContext context, string body)
+        : base(context)
     {
         byte[] bytes = Encoding.UTF8.GetBytes(body);
         Body = new MemoryStream(bytes);
@@ -59,7 +57,6 @@ public sealed class MockHttpRequestData : HttpRequestData
     }
 }
 
-
 public sealed class MockHttpResponseData(FunctionContext context) : HttpResponseData(context)
 {
     public override HttpStatusCode StatusCode { get; set; }
@@ -88,37 +85,35 @@ public class MockHttpRequestDataBuilder
 
     public MockHttpRequestDataBuilder WithDefaultJsonSerializer()
     {
-        this.requestServiceCollection
-            .Configure<WorkerOptions>(workerOptions =>
-            {
-                workerOptions.Serializer =
-                    new JsonObjectSerializer(
-                        new JsonSerializerOptions
-                        {
-                            AllowTrailingCommas = true,
-                        });
-            });
+        this.requestServiceCollection.Configure<WorkerOptions>(workerOptions =>
+        {
+            workerOptions.Serializer = new JsonObjectSerializer(
+                new JsonSerializerOptions { AllowTrailingCommas = true, }
+            );
+        });
 
         return this;
     }
 
     public MockHttpRequestDataBuilder WithCustomJsonSerializerSettings(
-        Func<JsonObjectSerializer> jsonObjectSerializerOptions)
+        Func<JsonObjectSerializer> jsonObjectSerializerOptions
+    )
     {
-        this.requestServiceCollection.Configure<WorkerOptions>(
-            workerOptions => workerOptions.Serializer = jsonObjectSerializerOptions());
+        this.requestServiceCollection.Configure<WorkerOptions>(workerOptions =>
+            workerOptions.Serializer = jsonObjectSerializerOptions()
+        );
         return this;
     }
 
     public MockHttpRequestDataBuilder WithRequestContextInstanceServices(
-        IServiceProvider requestContextInstanceServices)
+        IServiceProvider requestContextInstanceServices
+    )
     {
         this.requestContextInstanceServices = requestContextInstanceServices;
         return this;
     }
 
-    public MockHttpRequestDataBuilder WithInvocationFeatures(
-        IInvocationFeatures invocationFeatures)
+    public MockHttpRequestDataBuilder WithInvocationFeatures(IInvocationFeatures invocationFeatures)
     {
         this.invocationFeatures = invocationFeatures;
         return this;
@@ -126,13 +121,13 @@ public class MockHttpRequestDataBuilder
 
     public MockHttpRequestDataBuilder WithFakeFunctionContext()
     {
-        this.requestContextInstanceServices ??= this.requestServiceCollection.BuildServiceProvider();
+        this.requestContextInstanceServices ??=
+            this.requestServiceCollection.BuildServiceProvider();
 
-        this.functionContext =
-            new FakeFunctionContext(this.invocationFeatures)
-            {
-                InstanceServices = this.requestContextInstanceServices,
-            };
+        this.functionContext = new FakeFunctionContext(this.invocationFeatures)
+        {
+            InstanceServices = this.requestContextInstanceServices,
+        };
 
         return this;
     }
@@ -143,11 +138,13 @@ public class MockHttpRequestDataBuilder
         return this;
     }
 
-    public MockHttpRequestData Build()
-        => new(this.functionContext, this.rawJsonBody);
+    public MockHttpRequestData Build() => new(this.functionContext, this.rawJsonBody);
 }
 
-public class FakeFunctionContext(IInvocationFeatures features, IDictionary<object, object> items = null) : FunctionContext
+public class FakeFunctionContext(
+    IInvocationFeatures features,
+    IDictionary<object, object> items = null
+) : FunctionContext
 {
     public override string InvocationId { get; }
 

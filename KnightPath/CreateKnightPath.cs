@@ -39,7 +39,10 @@ namespace KnightPath
         }
 
         [Function("CreateKnightPath")]
-        public async Task<MultiResponse> RunAsync([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "knightpath")] HttpRequestData req)
+        public async Task<MultiResponse> RunAsync(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "knightpath")]
+                HttpRequestData req
+        )
         {
             ArgumentNullException.ThrowIfNull(req);
 
@@ -49,7 +52,8 @@ namespace KnightPath
 
             try
             {
-                CreateKnightPathRequest? input = JsonSerializer.Deserialize<CreateKnightPathRequest>(requestBody);
+                CreateKnightPathRequest? input =
+                    JsonSerializer.Deserialize<CreateKnightPathRequest>(requestBody);
                 ArgumentNullException.ThrowIfNull(input);
                 ValidatePosition(input.Source);
                 ValidatePosition(input.Target);
@@ -60,20 +64,18 @@ namespace KnightPath
                 response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
                 await response.WriteStringAsync(trackingId).ConfigureAwait(false);
 
-                CreateKnightPathQueueMessage message = new()
-                {
-                    TrackingId = trackingId,
-                    Source = input.Source,
-                    Target = input.Target
-                };
+                CreateKnightPathQueueMessage message =
+                    new()
+                    {
+                        TrackingId = trackingId,
+                        Source = input.Source,
+                        Target = input.Target
+                    };
 
-                return new MultiResponse()
-                {
-                    Message = message,
-                    HttpResponse = response
-                };
+                return new MultiResponse() { Message = message, HttpResponse = response };
             }
-            catch (Exception e) when (e is ArgumentException || e is ArgumentNullException || e is JsonException)
+            catch (Exception e)
+                when (e is ArgumentException || e is ArgumentNullException || e is JsonException)
             {
                 // NOTE: Unclear how to best implement the solution.
 #pragma warning disable CA1848
@@ -83,12 +85,11 @@ namespace KnightPath
                 HttpResponseData response = req.CreateResponse(HttpStatusCode.BadRequest);
                 response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
                 // NOTE: It would be nice to have different responses for different validation errors.
-                await response.WriteStringAsync("Error processing request body!").ConfigureAwait(false);
+                await response
+                    .WriteStringAsync("Error processing request body!")
+                    .ConfigureAwait(false);
 
-                return new MultiResponse()
-                {
-                    HttpResponse = response
-                };
+                return new MultiResponse() { HttpResponse = response };
             }
         }
     }

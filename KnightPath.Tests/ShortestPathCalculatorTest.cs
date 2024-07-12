@@ -6,14 +6,18 @@ public class ShortestPathCalculatorTest
     [Test]
     public void CalculateInvalidStart()
     {
-        ArgumentException e = Assert.Throws<ArgumentException>(() => ShortestPathCalculator.CalculateShortestPath("Meow", "A2"));
+        ArgumentException e = Assert.Throws<ArgumentException>(
+            () => ShortestPathCalculator.CalculateShortestPath("Meow", "A2")
+        );
         Assert.That(e.Message, Is.EqualTo("Position 'Meow' must contain exactly two characters."));
     }
 
     [Test]
     public void CalculateInvalidEnd()
     {
-        ArgumentException e = Assert.Throws<ArgumentException>(() => ShortestPathCalculator.CalculateShortestPath("A2", "Meow"));
+        ArgumentException e = Assert.Throws<ArgumentException>(
+            () => ShortestPathCalculator.CalculateShortestPath("A2", "Meow")
+        );
         Assert.That(e.Message, Is.EqualTo("Position 'Meow' must contain exactly two characters."));
     }
 

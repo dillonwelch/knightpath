@@ -1,8 +1,8 @@
-using Microsoft.Azure.Functions.Worker;
-using Microsoft.Azure.Functions.Worker.Http;
-using Microsoft.Azure.Functions.Worker.Extensions.Sql;
-using Microsoft.Extensions.Logging;
 using System.Net;
+using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Extensions.Sql;
+using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.Extensions.Logging;
 
 namespace KnightPath
 {
@@ -18,12 +18,15 @@ namespace KnightPath
         [Function("FindKnightPath")]
         public static async Task<HttpResponseData> RunAsync(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "knightpath")]
-            HttpRequestData req,
-            [SqlInput(commandText: "select * from dbo.Paths where TrackingId = @TrackingId",
+                HttpRequestData req,
+            [SqlInput(
+                commandText: "select * from dbo.Paths where TrackingId = @TrackingId",
                 commandType: System.Data.CommandType.Text,
                 parameters: "@TrackingId={Query.operationId}",
-                connectionStringSetting: "SqlConnectionString")]
-            IEnumerable<Path> path)
+                connectionStringSetting: "SqlConnectionString"
+            )]
+                IEnumerable<Path> path
+        )
         {
             Path? result = path.FirstOrDefault();
 

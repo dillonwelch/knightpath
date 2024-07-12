@@ -4,9 +4,19 @@ namespace KnightPath
 {
     public static class ShortestPathCalculator
     {
-        static readonly List<int[]> PossibleMoves = new([
-            [-2, -1], [-1, -2], [1, -2], [2, -1], [-2, 1], [-1, 2], [1, 2], [2, 1]
-        ]);
+        static readonly List<int[]> PossibleMoves =
+            new(
+                [
+                    [-2, -1],
+                    [-1, -2],
+                    [1, -2],
+                    [2, -1],
+                    [-2, 1],
+                    [-1, 2],
+                    [1, 2],
+                    [2, 1]
+                ]
+            );
 
         static char NumToRow(int position)
         {
