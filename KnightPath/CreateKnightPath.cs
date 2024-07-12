@@ -31,6 +31,9 @@ namespace KnightPath
     {
         private readonly ILogger<CreateKnightPath> _logger;
 
+        private static readonly JsonSerializerOptions options =
+            new() { PropertyNameCaseInsensitive = true };
+
         public CreateKnightPath(ILogger<CreateKnightPath> logger)
         {
             _logger = logger;
@@ -51,7 +54,7 @@ namespace KnightPath
             try
             {
                 CreateKnightPathRequest? input =
-                    JsonSerializer.Deserialize<CreateKnightPathRequest>(requestBody);
+                    JsonSerializer.Deserialize<CreateKnightPathRequest>(requestBody, options);
                 ArgumentNullException.ThrowIfNull(input);
                 ValidatePosition(input.Source);
                 ValidatePosition(input.Target);

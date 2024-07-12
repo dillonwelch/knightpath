@@ -37,6 +37,34 @@ public class CreateKnightPathTest
     }
 
     [Test]
+    public async Task CreateKnightPathSuccessCaseInsensitiveTest()
+    {
+        MockHttpRequestData mockHttpRequest = new MockHttpRequestDataBuilder()
+            .WithDefaultJsonSerializer()
+            .WithFakeFunctionContext()
+            .WithRawJsonBody("{\"source\": \"A1\", \"target\": \"D5\"}")
+            .Build();
+
+        CreateKnightPath function = new(new NullLogger<CreateKnightPath>());
+        MultiResponse response = await function.RunAsync(mockHttpRequest).ConfigureAwait(false);
+        string streamText = await ReadBody(response.HttpResponse.Body).ConfigureAwait(false);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(response.HttpResponse.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            Assert.That(response.Message, Is.Not.Null);
+            Assert.That(Guid.TryParse(streamText, out Guid val));
+        });
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(response.Message.Source, Is.EqualTo("A1"));
+            Assert.That(response.Message.Target, Is.EqualTo("D5"));
+            Assert.That(Guid.TryParse(response.Message.TrackingId, out Guid val));
+        });
+    }
+
+    [Test]
     public async Task CreateKnightPathMissingParamsTest()
     {
         MockHttpRequestData mockHttpRequest = new MockHttpRequestDataBuilder()
