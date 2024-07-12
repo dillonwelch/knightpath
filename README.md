@@ -76,7 +76,7 @@ Notes:
 # Improvements
 
 - Refactor data storage to use Azure Storage Tables instead of SQL Server.
-- Add support for arbitary sized boards.
+- Add support for arbitrary sized boards.
 - Add class and function level documentation for easier maintainability.
 - Add Dockerfile or similar for Azurite service for local development.
 - Add Azure Infrastructure as Code tooling to automate resoure creation, [example guide](https://codefresh.io/learn/infrastructure-as-code/infrastructure-as-code-on-azure-tools-and-best-practices/) I found.
