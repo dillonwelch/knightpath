@@ -9,6 +9,9 @@ namespace KnightPath
         {
             ArgumentNullException.ThrowIfNullOrWhiteSpace(position);
 
+            // NOTE: After looking at this code with fresh eyes, I think I could probably do this
+            // much more simply with a regex! However this would lose some fidelity in the level
+            // of detail of the error.
             if (position.Length != 2)
             {
                 throw new ArgumentException(
